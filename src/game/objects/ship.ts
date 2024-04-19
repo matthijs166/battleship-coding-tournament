@@ -1,5 +1,5 @@
 export default class Ship {
-    name: shipNames;
+    type: shipTypes;
     size: number;
     state: ShipState = ShipState.alive;
     emoji: string = "🚢";
@@ -7,8 +7,8 @@ export default class Ship {
     x: number = -1;
     y: number = -1;
 
-    constructor(args: {name: shipNames, size: number, state?: ShipState, emoji?: string, orientation?: ShipOrientation}){
-        this.name = args.name;
+    constructor(args: {type: shipTypes, size: number, state?: ShipState, emoji?: string, orientation?: ShipOrientation}){
+        this.type = args.type;
         this.size = args.size;
         if(args.state){
             this.state = args.state;
@@ -16,7 +16,7 @@ export default class Ship {
         if(args.emoji){
             this.emoji = args.emoji;
         } else {
-            this.emoji = shipEmojis[this.name];
+            this.emoji = shipEmojis[this.type];
         }
         if(args.orientation){
             this.orientation = args.orientation;
@@ -47,7 +47,7 @@ export enum ShipOrientation {
     vertical
 }
 
-export enum shipNames {
+export enum shipTypes {
     carrier,
     battleship,
     cruiser,
@@ -56,9 +56,9 @@ export enum shipNames {
 }
 
 const shipEmojis = {
-    [shipNames.carrier]: "🛳️ ",
-    [shipNames.battleship]: "🚢",
-    [shipNames.cruiser]: "🛥️ ",
-    [shipNames.submarine]: "🚤",
-    [shipNames.destroyer]: "⛴️ "
+    [shipTypes.carrier]: "🛳️ ",
+    [shipTypes.battleship]: "🚢",
+    [shipTypes.cruiser]: "🛥️ ",
+    [shipTypes.submarine]: "🚤",
+    [shipTypes.destroyer]: "⛴️ "
 }

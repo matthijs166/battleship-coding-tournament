@@ -1,6 +1,6 @@
 import logger from "$utils/logger";
 import Playboard from "./objects/playboard";
-import Ship, { ShipOrientation, shipNames } from "./objects/ship";
+import Ship, { ShipOrientation, shipTypes } from "./objects/ship";
 
 const playboard = new Playboard();
 
@@ -8,7 +8,7 @@ const playboard = new Playboard();
 // place first ship
 playboard.placeShip({
     ship: new Ship({
-        name: shipNames.carrier,
+        type: shipTypes.carrier,
         size: 5
     }),
     x: 0,
@@ -19,7 +19,7 @@ playboard.placeShip({
 // place second ship
 playboard.placeShip({
     ship: new Ship({
-        name: shipNames.battleship,
+        type: shipTypes.battleship,
         size: 4
     }),
     x: 2,
@@ -30,7 +30,7 @@ playboard.placeShip({
 // place third ship
 playboard.placeShip({
     ship: new Ship({
-        name: shipNames.cruiser,
+        type: shipTypes.cruiser,
         size: 3
     }),
     x: 4,
@@ -41,7 +41,7 @@ playboard.placeShip({
 // place fourth ship
 playboard.placeShip({
     ship: new Ship({
-        name: shipNames.submarine,
+        type: shipTypes.submarine,
         size: 3
     }),
     x: 6,
@@ -52,7 +52,7 @@ playboard.placeShip({
 // place fifth ship
 playboard.placeShip({
     ship: new Ship({
-        name: shipNames.destroyer,
+        type: shipTypes.destroyer,
         size: 2
     }),
     x: 8,
