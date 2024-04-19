@@ -1,4 +1,4 @@
-import { Ship, ShipOrientation, ShipState } from "./ship";
+import Ship, { ShipOrientation, ShipState } from "./ship";
 import logger from "$utils/logger";
 import PlayboardCell, { CellState } from "./playboardCell";
 
