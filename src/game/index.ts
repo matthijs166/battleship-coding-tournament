@@ -94,6 +94,6 @@ export default class Game {
 
         console.log("");
         console.log("");
-        logger.printAll();
+        logger.printAll(20);
     }
 }

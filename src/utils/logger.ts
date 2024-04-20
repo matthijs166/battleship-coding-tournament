@@ -33,7 +33,10 @@ class Logger {
     printAll(maxLines: number = -1) {
         console.log("---- All LOG messages: ---- ");
         this.queue
-        .slice(0, maxLines > 0 ? maxLines : this.queue.length)
+        // revert order
+        .slice().reverse()
+        // limit lines if -1 then no limit
+        .slice(0, maxLines)
         .forEach((line) => {
             switch (line.type) {
                 case logTypes.log:
