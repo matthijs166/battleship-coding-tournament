@@ -109,7 +109,7 @@ export default class Playboard{
         return shipCells;
     }
 
-    targetCell(x: number, y: number) : PlayboardCell | false {
+    receiveAttack(x: number, y: number){
         // check if the cell is in bounds
         if(x >= this.xSize || y >= this.ySize){
             logger.error("Cell out of bounds to target anyting");

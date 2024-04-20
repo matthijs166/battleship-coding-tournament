@@ -65,13 +65,13 @@ playboard.placeShip({
 
 logger.log("All ships placed on the playboard");
 
-playboard.targetCell(0, 0);
+playboard.receiveAttack(0, 0);
 
-playboard.targetCell(8, 2);
-playboard.targetCell(8, 2);
+playboard.receiveAttack(8, 2);
+playboard.receiveAttack(8, 2);
 
-playboard.targetCell(8, 8);
-playboard.targetCell(8, 9);
+playboard.receiveAttack(8, 8);
+playboard.receiveAttack(8, 9);
 
 
 playboard.printPlayboard();

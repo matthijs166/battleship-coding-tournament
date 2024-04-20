@@ -51,7 +51,7 @@ export default class Player{
     }
 
     turn(){
-        this.brain.turn();
+        return this.brain.turn();
     }
 
     allShipsSunk(){

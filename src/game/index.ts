@@ -11,6 +11,7 @@ export type GameArgs = {
 export default class Game {
     player1: Player;
     player2: Player;
+    playerTurn: 1 | 2 = 1;
 
     constructor(args: GameArgs){
         this.player1 = new Player(
@@ -30,6 +31,23 @@ export default class Game {
         this.player1.start();
         this.player2.start();
         this.render();
+    }
+
+    updateTick(){
+        const currentPlayer = this.playerTurn === 1 ? this.player1 : this.player2;
+        const enemyPlayer = this.playerTurn === 1 ? this.player2 : this.player1;
+
+        const attackCoords = currentPlayer.turn();
+        if (!attackCoords){
+            logger.error("No attack coordinates returned from player " + currentPlayer.name);
+            return;
+        }
+
+        const {x, y} = attackCoords;
+        enemyPlayer.playboard.receiveAttack(x, y);
+        this.render();
+
+        this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     }
 
     render(){

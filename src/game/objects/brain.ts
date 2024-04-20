@@ -1,23 +1,21 @@
 import type Playboard from "./playboard";
-
-interface Brain {
-    name: string;
+abstract class Brain {
+    abstract name: string;
     playboardData: playboardData;
-    memory: any;
+    abstract memory: any;
 
-    // Method before we start the game
-    // Place your ships here
-    start(): void;
-    
-    // Method triggered when it's your turn
-    turn(): {x: number, y: number} | undefined;
+    constructor(playboardData: playboardData){
+        this.playboardData = playboardData;
+    }
+
+    abstract start(): void;
+
+    abstract turn(): {x: number, y: number} | undefined;
+
+    updateBrain(playboardData: playboardData): void {
+        this.playboardData = playboardData;
+    }
 }
-
-export interface BrainConstructor {
-    new(myPlayboard: Playboard): Brain;
-}
-
-declare var Brain: BrainConstructor;
 
 export default Brain;
 
