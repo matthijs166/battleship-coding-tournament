@@ -186,4 +186,4 @@ export type placeShipArgs = {
     orientation: ShipOrientation
 }
 
-export type placeShipCallback = (args: placeShipArgs) => void;
+export type placeShipCallback = (args: placeShipArgs) => boolean;

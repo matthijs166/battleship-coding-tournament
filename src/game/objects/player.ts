@@ -43,7 +43,7 @@ export default class Player{
                 enemyBoard: undefined
             },
             (args) => {
-                this.placeShip(args);
+                return this.placeShip(args);
             }
         );
     }
@@ -68,11 +68,11 @@ export default class Player{
         const originalShip = this.ships.find(ship => ship.id === args.ship.id);
         if (!originalShip){
             logger.error("Original Ship object not found anymore");
-            return;
+            return false;
         }
         args.ship = originalShip;
 
-        this.playboard.placeShip(args);
+        return this.playboard.placeShip(args);
     }
 
     allShipsSunk(){

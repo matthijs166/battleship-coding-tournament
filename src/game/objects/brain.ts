@@ -21,7 +21,7 @@ abstract class Brain {
     }
 
     placeShip(args: placeShipArgs){
-        this.placeShipCallback(args);
+        return this.placeShipCallback(args);
     }
 }
 
