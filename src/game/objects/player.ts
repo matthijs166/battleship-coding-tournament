@@ -37,8 +37,9 @@ export default class Player{
         ]
 
         this.brain = new brain({
-            my: this.playboard,
-            enemy: undefined
+            myBoard: this.playboard.export(),
+            myShips: this.exportShips(),
+            enemyBoard: undefined
         });
     }
 
@@ -64,6 +65,10 @@ export default class Player{
 
     allShipsPlaced(){
         return this.ships.every(ship => ship.state === ShipState.alive);
+    }
+
+    exportShips(){
+        return JSON.parse(JSON.stringify(this.ships));
     }
 
 }

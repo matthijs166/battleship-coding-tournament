@@ -1,4 +1,5 @@
 import type Playboard from "./playboard";
+import type Ship from "./ship";
 abstract class Brain {
     abstract name: string;
     brainGameData: brainGameData;
@@ -20,6 +21,7 @@ abstract class Brain {
 export default Brain;
 
 export type brainGameData = {
-    my: Playboard,
-    enemy: Playboard | undefined
+    myBoard: Playboard,
+    myShips: Ship[] | undefined,
+    enemyBoard: Playboard | undefined
 }

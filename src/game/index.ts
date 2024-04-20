@@ -37,15 +37,7 @@ export default class Game {
         const currentPlayer = this.playerTurn === 1 ? this.player1 : this.player2;
         const enemyPlayer = this.playerTurn === 1 ? this.player2 : this.player1;
 
-        // update data for the players
-        currentPlayer.updateBrain({
-            my: currentPlayer.playboard.exportThis(),
-            enemy: enemyPlayer.playboard.exportThisMaskedForOpponent()
-        });
-        enemyPlayer.updateBrain({
-            my: enemyPlayer.playboard.exportThis(),
-            enemy: currentPlayer.playboard.exportThisMaskedForOpponent()
-        });
+        this.updatePlayerData();
 
         // Attack the enemy player
         const attackCoords = currentPlayer.turn();
@@ -56,9 +48,27 @@ export default class Game {
         const {x, y} = attackCoords;
         enemyPlayer.playboard.receiveAttack(x, y);
 
+        this.updatePlayerData();
+
         // finish the turn
         this.render();
         this.playerTurn = this.playerTurn === 1 ? 2 : 1;
+    }
+
+    updatePlayerData(){
+        const currentPlayer = this.playerTurn === 1 ? this.player1 : this.player2;
+        const enemyPlayer = this.playerTurn === 1 ? this.player2 : this.player1;
+
+        currentPlayer.updateBrain({
+            myBoard: currentPlayer.playboard.export(),
+            enemyBoard: enemyPlayer.playboard.exportMaskedForOpponent(),
+            myShips: currentPlayer.exportShips()
+        });
+        enemyPlayer.updateBrain({
+            myBoard: enemyPlayer.playboard.export(),
+            enemyBoard: currentPlayer.playboard.exportMaskedForOpponent(),
+            myShips: enemyPlayer.exportShips()
+        });
     }
 
     render(){

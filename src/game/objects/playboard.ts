@@ -147,7 +147,7 @@ export default class Playboard{
         }
     }
 
-    exportThisMaskedForOpponent(){
+    exportMaskedForOpponent(){
         const boardCopy: Playboard = JSON.parse(JSON.stringify(this));
 
         // Remove any data about the ships
@@ -163,7 +163,7 @@ export default class Playboard{
         return boardCopy;
     }
 
-    exportThis(){
+    export(){
         return JSON.parse(JSON.stringify(this));
     }
 }
