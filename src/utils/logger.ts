@@ -30,9 +30,11 @@ class Logger {
         });
     }
 
-    printAll() {
+    printAll(maxLines: number = -1) {
         console.log("---- All LOG messages: ---- ");
-        this.queue.forEach((line) => {
+        this.queue
+        .slice(0, maxLines > 0 ? maxLines : this.queue.length)
+        .forEach((line) => {
             switch (line.type) {
                 case logTypes.log:
                     console.log("[LOG]: ", line.message);
