@@ -37,16 +37,27 @@ export default class Game {
         const currentPlayer = this.playerTurn === 1 ? this.player1 : this.player2;
         const enemyPlayer = this.playerTurn === 1 ? this.player2 : this.player1;
 
+        // update data for the players
+        currentPlayer.updateBrain({
+            my: currentPlayer.playboard.exportThis(),
+            enemy: enemyPlayer.playboard.exportThisMaskedForOpponent()
+        });
+        enemyPlayer.updateBrain({
+            my: enemyPlayer.playboard.exportThis(),
+            enemy: currentPlayer.playboard.exportThisMaskedForOpponent()
+        });
+
+        // Attack the enemy player
         const attackCoords = currentPlayer.turn();
         if (!attackCoords){
             logger.error("No attack coordinates returned from player " + currentPlayer.name);
             return;
         }
-
         const {x, y} = attackCoords;
         enemyPlayer.playboard.receiveAttack(x, y);
-        this.render();
 
+        // finish the turn
+        this.render();
         this.playerTurn = this.playerTurn === 1 ? 2 : 1;
     }
 

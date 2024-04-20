@@ -159,5 +159,11 @@ export default class Playboard{
                 cell.shipRef = null;
             });
         });
+
+        return boardCopy;
+    }
+
+    exportThis(){
+        return JSON.parse(JSON.stringify(this));
     }
 }

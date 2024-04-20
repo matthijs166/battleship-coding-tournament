@@ -50,6 +50,10 @@ export default class Player{
         }
     }
 
+    updateBrain(playboardData: playboardData){
+        this.brain.updateBrain(playboardData);
+    }
+
     turn(){
         return this.brain.turn();
     }
