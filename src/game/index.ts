@@ -25,6 +25,10 @@ export default class Game {
 
         this.render();
         this.start();
+
+        setInterval(() => {
+            this.updateTick();
+        }, 100);
     }
 
     start(){

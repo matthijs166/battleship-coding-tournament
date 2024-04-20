@@ -1,6 +1,7 @@
 import Ship, { ShipOrientation, ShipState } from "./ship";
 import logger from "$utils/logger";
 import PlayboardCell, { CellState } from "./playboardCell";
+import { deepClone } from "$utils/general";
 
 export default class Playboard{
     xSize: number = 10;
@@ -155,23 +156,23 @@ export default class Playboard{
     }
 
     exportMaskedForOpponent(){
-        const boardCopy: Playboard = JSON.parse(JSON.stringify(this));
+        const boardCopy: Playboard = deepClone(this);
 
-        // Remove any data about the ships
-        boardCopy.cells.forEach(row => {
-            row.forEach(cell => {
-                if(cell.state === CellState.ship){
-                    cell.updateState(CellState.empty);
-                }
-                cell.shipRef = null;
-            });
-        });
+        // // Remove any data about the ships
+        // boardCopy.cells.forEach(row => {
+        //     row.forEach(cell => {
+        //         if(cell.state === CellState.ship){
+        //             cell.updateState(CellState.empty);
+        //         }
+        //         cell.shipRef = null;
+        //     });
+        // });
 
         return boardCopy;
     }
 
     export(){
-        return JSON.parse(JSON.stringify(this));
+        return deepClone(this);
     }
 
     lock(){

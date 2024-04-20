@@ -35,8 +35,6 @@ export default class BasicBrain extends Brain {
     }
 
     turn(){
-        logger.log("BasicBrain turn");
-
         // Hit a random cell on the enemy playboard
         return {
             x: Math.floor(Math.random() * 10),

@@ -1,3 +1,4 @@
+import { deepClone } from "$utils/general";
 import logger from "$utils/logger";
 import type Brain from "./brain";
 import type { BrainConstructor, brainGameData } from "./brain";
@@ -84,7 +85,7 @@ export default class Player{
     }
 
     exportShips(){
-        return JSON.parse(JSON.stringify(this.ships));
+        return deepClone(this.ships);
     }
 
 }
