@@ -1,11 +1,11 @@
 import logger from "$utils/logger";
 import BasicBrain from "src/brains/basic";
 import Player from "./objects/player";
-import type { brainGameData } from "./objects/brain";
+import type { BrainConstructor, brainGameData } from "./objects/brain";
 
 export type GameArgs = {
-    player1Brain: new (brainGameData: brainGameData) => BasicBrain,
-    player2Brain: new (brainGameData: brainGameData) => BasicBrain
+    player1Brain: BrainConstructor,
+    player2Brain: BrainConstructor
 }
 
 export default class Game {
@@ -30,6 +30,11 @@ export default class Game {
     start(){
         this.player1.start();
         this.player2.start();
+
+        // lock the boards
+        this.player1.playboard.lock()
+        this.player2.playboard.lock();
+
         this.render();
     }
 

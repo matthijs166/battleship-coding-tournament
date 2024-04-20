@@ -1,7 +1,7 @@
 import logger from "$utils/logger";
 import type Brain from "./brain";
-import type { brainGameData } from "./brain";
-import Playboard from "./playboard";
+import type { BrainConstructor, brainGameData } from "./brain";
+import Playboard, { type placeShipArgs } from "./playboard";
 import Ship, { shipTypes, ShipState } from "./ship";
 
 export default class Player{
@@ -10,7 +10,7 @@ export default class Player{
     ships: Ship[];
     brain: Brain;
 
-    constructor(name: string, brain: new (brainGameData: brainGameData) => Brain){
+    constructor(name: string, brain: BrainConstructor){
         this.name = name;
         this.playboard = new Playboard();
         this.ships = [
@@ -36,11 +36,16 @@ export default class Player{
             })
         ]
 
-        this.brain = new brain({
-            myBoard: this.playboard.export(),
-            myShips: this.exportShips(),
-            enemyBoard: undefined
-        });
+        this.brain = new brain(
+            {
+                myBoard: this.playboard.export(),
+                myShips: this.exportShips(),
+                enemyBoard: undefined
+            },
+            (args) => {
+                this.placeShip(args);
+            }
+        );
     }
 
     start(){
@@ -57,6 +62,17 @@ export default class Player{
 
     turn(){
         return this.brain.turn();
+    }
+
+    placeShip(args: placeShipArgs){
+        const originalShip = this.ships.find(ship => ship.id === args.ship.id);
+        if (!originalShip){
+            logger.error("Original Ship object not found anymore");
+            return;
+        }
+        args.ship = originalShip;
+
+        this.playboard.placeShip(args);
     }
 
     allShipsSunk(){

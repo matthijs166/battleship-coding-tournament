@@ -6,6 +6,7 @@ export default class Playboard{
     xSize: number = 10;
     ySize: number = 10;
     cells: PlayboardCell[][] = [];
+    lockPlacement: boolean = false;
 
     constructor(){
         this.buildPlayboard();
@@ -44,8 +45,14 @@ export default class Playboard{
         console.log(playboardString);
     }
 
-    placeShip(args: {ship: Ship, x: number, y: number, orientation: ShipOrientation}) : boolean {
+    placeShip(args: placeShipArgs) : boolean {
         const {ship, x, y, orientation} = args;
+
+        // check board is already locked
+        if(this.lockPlacement){
+            logger.error("Ship not placed. Board is locked");
+            return false;
+        }
 
         ship.setOrientation(orientation);
         ship.setPosition(x, y);
@@ -166,4 +173,17 @@ export default class Playboard{
     export(){
         return JSON.parse(JSON.stringify(this));
     }
+
+    lock(){
+        this.lockPlacement = true;
+    }
 }
+
+export type placeShipArgs = {
+    ship: Ship,
+    x: number,
+    y: number,
+    orientation: ShipOrientation
+}
+
+export type placeShipCallback = (args: placeShipArgs) => void;
