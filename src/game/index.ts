@@ -1,11 +1,11 @@
 import logger from "$utils/logger";
 import BasicBrain from "src/brains/basic";
 import Player from "./objects/player";
-import type { playboardData } from "./objects/brain";
+import type { brainGameData } from "./objects/brain";
 
 export type GameArgs = {
-    player1Brain: new (playboardData: playboardData) => BasicBrain,
-    player2Brain: new (playboardData: playboardData) => BasicBrain
+    player1Brain: new (brainGameData: brainGameData) => BasicBrain,
+    player2Brain: new (brainGameData: brainGameData) => BasicBrain
 }
 
 export default class Game {

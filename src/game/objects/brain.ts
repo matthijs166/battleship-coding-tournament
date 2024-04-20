@@ -1,25 +1,25 @@
 import type Playboard from "./playboard";
 abstract class Brain {
     abstract name: string;
-    playboardData: playboardData;
+    brainGameData: brainGameData;
     abstract memory: any;
 
-    constructor(playboardData: playboardData){
-        this.playboardData = playboardData;
+    constructor(brainGameData: brainGameData){
+        this.brainGameData = brainGameData;
     }
 
     abstract start(): void;
 
     abstract turn(): {x: number, y: number} | undefined;
 
-    updateBrain(playboardData: playboardData): void {
-        this.playboardData = playboardData;
+    updateBrain(brainGameData: brainGameData): void {
+        this.brainGameData = brainGameData;
     }
 }
 
 export default Brain;
 
-export type playboardData = {
+export type brainGameData = {
     my: Playboard,
     enemy: Playboard | undefined
 }

@@ -1,6 +1,6 @@
 import logger from "$utils/logger";
 import type Brain from "./brain";
-import type { playboardData } from "./brain";
+import type { brainGameData } from "./brain";
 import Playboard from "./playboard";
 import Ship, { shipTypes, ShipState } from "./ship";
 
@@ -10,7 +10,7 @@ export default class Player{
     ships: Ship[];
     brain: Brain;
 
-    constructor(name: string, brain: new (playboardData: playboardData) => Brain){
+    constructor(name: string, brain: new (brainGameData: brainGameData) => Brain){
         this.name = name;
         this.playboard = new Playboard();
         this.ships = [
@@ -50,8 +50,8 @@ export default class Player{
         }
     }
 
-    updateBrain(playboardData: playboardData){
-        this.brain.updateBrain(playboardData);
+    updateBrain(brainGameData: brainGameData){
+        this.brain.updateBrain(brainGameData);
     }
 
     turn(){
