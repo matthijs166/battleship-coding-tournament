@@ -1,78 +1,55 @@
 import logger from "$utils/logger";
-import Playboard from "./objects/playboard";
-import Ship, { ShipOrientation, shipTypes } from "./objects/ship";
+import BasicBrain from "src/brains/basic";
+import Player from "./objects/player";
+import type { playboardData } from "./objects/brain";
 
-const playboard = new Playboard();
+export type GameArgs = {
+    player1Brain: new (playboardData: playboardData) => BasicBrain,
+    player2Brain: new (playboardData: playboardData) => BasicBrain
+}
 
+export default class Game {
+    player1: Player;
+    player2: Player;
 
-// place first ship
-playboard.placeShip({
-    ship: new Ship({
-        type: shipTypes.carrier,
-        size: 5
-    }),
-    x: 0,
-    y: 0,
-    orientation: ShipOrientation.vertical
-});
+    constructor(args: GameArgs){
+        this.player1 = new Player(
+            "Player 1",
+            args.player1Brain
+        );
+        this.player2 = new Player(
+            "Player 2",
+            args.player2Brain
+        );
 
-// place second ship
-playboard.placeShip({
-    ship: new Ship({
-        type: shipTypes.battleship,
-        size: 4
-    }),
-    x: 2,
-    y: 2,
-    orientation: ShipOrientation.horizontal
-});
+        this.render();
+        this.start();
+    }
 
-// place third ship
-playboard.placeShip({
-    ship: new Ship({
-        type: shipTypes.cruiser,
-        size: 3
-    }),
-    x: 4,
-    y: 4,
-    orientation: ShipOrientation.vertical
-});
+    start(){
+        this.player1.start();
+        this.player2.start();
+        this.render();
+    }
 
-// place fourth ship
-playboard.placeShip({
-    ship: new Ship({
-        type: shipTypes.submarine,
-        size: 3
-    }),
-    x: 6,
-    y: 6,
-    orientation: ShipOrientation.vertical
-});
+    render(){
+        // clear the screen
+        console.clear();
 
-// place fifth ship
-playboard.placeShip({
-    ship: new Ship({
-        type: shipTypes.destroyer,
-        size: 2
-    }),
-    x: 8,
-    y: 8,
-    orientation: ShipOrientation.horizontal
-});
+        console.log("----- Welcome to Battleship! -----");
+        console.log("");
+        console.log("Player 1");
+        console.log("");
+        this.player1.playboard.printPlayboard();
 
-// print playboard
+        console.log("");
+        console.log("");
+        console.log("Player 2");
+        console.log("");
+        this.player2.playboard.printPlayboard();
 
-
-logger.log("All ships placed on the playboard");
-
-playboard.targetCell(0, 0);
-
-playboard.targetCell(8, 2);
-playboard.targetCell(8, 2);
-
-playboard.targetCell(8, 8);
-playboard.targetCell(8, 9);
-
-
-playboard.printPlayboard();
-logger.printAll();
+        console.log("");
+        console.log("");
+        logger.printAll();
+    }
+}

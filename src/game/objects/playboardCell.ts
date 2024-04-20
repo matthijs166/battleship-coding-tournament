@@ -1,4 +1,4 @@
-import type { Ship } from "./ship";
+import type Ship from "./ship";
 
 export default class PlayboardCell{
     x: number;

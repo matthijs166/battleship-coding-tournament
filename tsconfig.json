@@ -11,6 +11,7 @@
     "baseUrl": ".",
     "paths": {
       "$utils/*": ["src/utils/*"],
+      "$game/*": ["src/game/*"],
     },
 
 

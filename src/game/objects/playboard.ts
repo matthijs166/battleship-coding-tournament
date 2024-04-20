@@ -3,11 +3,9 @@ import logger from "$utils/logger";
 import PlayboardCell, { CellState } from "./playboardCell";
 
 export default class Playboard{
-
     xSize: number = 10;
     ySize: number = 10;
     cells: PlayboardCell[][] = [];
-
 
     constructor(){
         this.buildPlayboard();
@@ -50,6 +48,7 @@ export default class Playboard{
         const {ship, x, y, orientation} = args;
 
         ship.setOrientation(orientation);
+        ship.setPosition(x, y);
         
         // check if the ship can be placed
         if (!this.shipInBounds(ship, x, y)){
@@ -57,12 +56,10 @@ export default class Playboard{
             return false;
         }
 
-        ship.setPosition(x, y);
         const shipCells = this.getShipCells(ship);
 
         // Check if the cells are not occupied
         if (shipCells.some(cell => cell.state === CellState.ship)){
-            ship.setPosition(-1, -1);
             logger.error("Ship not placed. Ship is overlapping with another ship");
             return false;
         }
@@ -71,6 +68,8 @@ export default class Playboard{
         for(let cell of shipCells){
             cell.setShipRef(ship);
         }
+
+        ship.updateState(ShipState.alive);
 
         return true;
     }
@@ -146,5 +145,19 @@ export default class Playboard{
             ship.updateState(ShipState.sunk);
             logger.log("Ship sunk!");
         }
+    }
+
+    exportThisMaskedForOpponent(){
+        const boardCopy: Playboard = JSON.parse(JSON.stringify(this));
+
+        // Remove any data about the ships
+        boardCopy.cells.forEach(row => {
+            row.forEach(cell => {
+                if(cell.state === CellState.ship){
+                    cell.updateState(CellState.empty);
+                }
+                cell.shipRef = null;
+            });
+        });
     }
 }

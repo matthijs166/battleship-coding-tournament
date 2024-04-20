@@ -1,11 +1,12 @@
 export default class Ship {
     type: shipTypes;
     size: number;
-    state: ShipState = ShipState.alive;
+    state: ShipState = ShipState.idle;
     emoji: string = "🚢";
     orientation: ShipOrientation = ShipOrientation.horizontal;
-    x: number = -1;
-    y: number = -1;
+    x: number = 0;
+    y: number = 0;
+    id: number = Math.floor(Math.random() * 1000);
 
     constructor(args: {type: shipTypes, size: number, state?: ShipState, emoji?: string, orientation?: ShipOrientation}){
         this.type = args.type;
@@ -38,6 +39,7 @@ export default class Ship {
 }
 
 export enum ShipState {
+    idle,
     alive,
     sunk
 }
