@@ -1,46 +1,43 @@
 import logger from "./logger";
 
-export function deepClone<T>(obj: T): T {
-
-    logger.error("Deepclone not working correctly!!!");
-
+// Deep clone a class instance
+export function deepClone(obj: any): any {
     if (obj === null || typeof obj !== 'object') {
-        return obj; // Return primitive types and null as-is
+        return obj;
     }
 
-    if (Array.isArray(obj)) {
-        // Handle arrays
-        return obj.map(item => deepClone(item)) as any;
+    // if it is an array then clone each element
+    if (Array.isArray(obj)){
+        return obj.map((el) => deepClone(el));
     }
 
-    // Handle objects
-    const clonedObj: any = {};
-    for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            clonedObj[key] = deepClone(obj[key]);
+    // if it is a number or string then return it
+    if (typeof obj === 'number' || typeof obj === 'string'){
+        return obj;
+    }
+
+    // if it is a function then return it
+    if (typeof obj === 'function'){
+        return obj;
+    }
+
+    // if it is a class instance then clone it
+    if (obj.constructor.name !== 'Object'){
+        let clone =  Object.create(Object.getPrototypeOf(obj));
+
+        // set this reference to the new object
+        Object.setPrototypeOf(clone, obj);
+
+        // clone each property
+        for (let key in obj){
+            clone[key] = deepClone(obj[key]);
         }
+
+        return clone;
     }
 
-    // Handle functions
-    if (typeof obj === 'function') {
-        const propNames = Object.getOwnPropertyNames(obj);
-        propNames.forEach(name => {
-            const desc = Object.getOwnPropertyDescriptor(obj, name);
-            if (desc) {
-                Object.defineProperty(clonedObj, name, desc);
-            }
-        });
-    }
 
-    // Handel methods
-    const propNames = Object.getOwnPropertyNames(obj);
-    propNames.forEach(name => {
-        const desc = Object.getOwnPropertyDescriptor(obj, name);
-        if (desc) {
-            Object.defineProperty(clonedObj, name, desc);
-        }
-    });
-
-
-    return clonedObj as T;
+    return obj
 }
+
+
