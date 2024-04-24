@@ -158,15 +158,15 @@ export default class Playboard{
     exportMaskedForOpponent(){
         const boardCopy: Playboard = deepClone(this);
 
-        // // Remove any data about the ships
-        // boardCopy.cells.forEach(row => {
-        //     row.forEach(cell => {
-        //         if(cell.state === CellState.ship){
-        //             cell.updateState(CellState.empty);
-        //         }
-        //         cell.shipRef = null;
-        //     });
-        // });
+        // Remove any data about the ships
+        boardCopy.cells.forEach(row => {
+            row.forEach(cell => {
+                if(cell.state === CellState.ship){
+                    cell.updateState(CellState.empty);
+                }
+                cell.shipRef = null;
+            });
+        });
 
         return boardCopy;
     }
