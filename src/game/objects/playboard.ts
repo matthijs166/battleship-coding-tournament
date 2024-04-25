@@ -7,7 +7,7 @@ export default class Playboard{
     xSize: number = 10;
     ySize: number = 10;
     cells: PlayboardCell[][] = [];
-    lockPlacement: boolean = false;
+    private lockPlacement: boolean = false;
 
     constructor(){
         this.buildPlayboard();
@@ -177,6 +177,15 @@ export default class Playboard{
 
     lock(){
         this.lockPlacement = true;
+    }
+
+    getAllCells(){
+        return this.cells.flat();
+    }
+
+    getCellsByState(cellState: CellState | undefined){
+        return this.getAllCells()
+            .filter(cell => cell.state === cellState || cellState === undefined);
     }
 }
 
