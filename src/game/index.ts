@@ -8,7 +8,8 @@ import { ShipState } from "./objects/ship";
 export type GameArgs = {
     player1Brain: BrainConstructor,
     player2Brain: BrainConstructor,
-    renderSettings?: RenderSettings
+    renderSettings?: RenderSettings,
+    simulationSpeed?: number
 }
 
 type RenderSettings = {
@@ -22,6 +23,7 @@ export default class Game {
     winner: Player | false = false;
     renderSettings: RenderSettings;
     turnCount: number = 0;
+    simulationSpeed: number;
 
     constructor(args: GameArgs){
         this.player1 = new Player(
@@ -37,6 +39,9 @@ export default class Game {
             fullGame: true
         };
 
+
+        this.simulationSpeed = args.simulationSpeed || -1;
+
         this.render();
     }
 
@@ -49,10 +54,18 @@ export default class Game {
 
         this.render();
 
-        while(!this.winner){
-            this.updateTick();
-            this.checkForGameOver();
-            this.render();
+        if (this.simulationSpeed > 0){
+            const interval = setInterval(() => {
+                if (this.winner){
+                    clearInterval(interval);
+                } else {
+                    this.updateTick();
+                }
+            }, this.simulationSpeed);
+        } else {
+            while(!this.winner){
+                this.updateTick();
+            }
         }
     }
 
