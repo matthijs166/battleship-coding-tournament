@@ -267,13 +267,3 @@ export default class Benchmark {
     }
 
 }
-
-new Benchmark({
-    iterations: 300,
-    threads: 10,
-    brainFileNames: [
-        // "basicOptimized",
-        "basic",
-        "basic",
-    ]
-})
