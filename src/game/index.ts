@@ -140,15 +140,17 @@ export default class Game {
 
         return {
             totalTurns: this.turnCount,
-            winner: this.winner ? this.winner.name : false,
+            winner: this.winner === this.player1 ? 1 : 2,
             player1: {
                 hitsTaken: player1TotalHits,
+                hitsGiven: player2TotalHits,
                 accuracy: Math.round(
                     100 / (player2TotalHits + player2TotalMisses) * player2TotalHits * 100
                 ) / 100,
             },
             player2: {
                 hitsTaken: player2TotalHits,
+                hitsGiven: player1TotalHits,
                 accuracy: Math.round(
                     100 / (player1TotalHits + player1TotalMisses) * player1TotalHits * 100
                 ) / 100,
