@@ -71,11 +71,12 @@ export default class Game {
         const {x, y} = attackCoords;
         enemyPlayer.playboard.receiveAttack(x, y);
 
-        this.updatePlayerData();
-
         // finish the turn
         this.playerTurn = this.playerTurn === 1 ? 2 : 1;
         this.turnCount++;
+        this.updatePlayerData();
+        this.checkForGameOver();
+        this.render();
     }
 
     checkForGameOver(){
