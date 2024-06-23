@@ -41,6 +41,8 @@ export function renderLayout(data: LayoutData) {
         xOffSet: xOffSet,
         title: "Wining Rate"
     })
+    // sort by win rate
+    data.brainStats.sort((a, b) => b.winRate - a.winRate)
     data.brainStats.forEach((brainStat) => {
         winChart.addBar({
             value: brainStat.winRate,
@@ -58,6 +60,8 @@ export function renderLayout(data: LayoutData) {
         xOffSet: xOffSet,
         title: "Losing Rate"
     })
+    // sort by lose rate
+    data.brainStats.sort((a, b) => b.loseRate - a.loseRate)
     data.brainStats.forEach((brainStat) => {
         loseChart.addBar({
             value: brainStat.loseRate,
@@ -75,6 +79,8 @@ export function renderLayout(data: LayoutData) {
         xOffSet: xOffSet,
         title: "Taken Hits"
     })
+    // sort by taken hits
+    data.brainStats.sort((a, b) => b.takenHits - a.takenHits)
     data.brainStats.forEach((brainStat) => {
         takenHitsChart.addBar({
             value: brainStat.takenHits,
@@ -92,6 +98,8 @@ export function renderLayout(data: LayoutData) {
         xOffSet: xOffSet,
         title: "Given Hits"
     })
+    // sort by given hits
+    data.brainStats.sort((a, b) => b.givenHits - a.givenHits)
     data.brainStats.forEach((brainStat) => {
         givenHitsChart.addBar({
             value: brainStat.givenHits,
