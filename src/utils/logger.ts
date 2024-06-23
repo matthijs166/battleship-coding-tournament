@@ -38,6 +38,7 @@ class Logger {
         // limit lines if -1 then no limit
         .slice(0, maxLines)
         .forEach((line) => {
+            line.message = this.formatMessage(line.message);
             switch (line.type) {
                 case logTypes.log:
                     console.log("[LOG]: ", line.message);
@@ -50,6 +51,13 @@ class Logger {
                     break;
             }
         });
+    }
+
+    formatMessage(message: any): string {
+        if (typeof message === "object") {
+            return JSON.stringify(message, null, 2);
+        }
+        return message;
     }
 }
 
