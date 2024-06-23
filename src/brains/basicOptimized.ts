@@ -4,7 +4,7 @@ import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
 
 export default class BasicOptimized extends Brain {
-    name = "Basic Brain";
+    name = "Basic Optimized";
     memory = {};
     // brainGameData contains myBoard, myShips, enemyBoard
 
