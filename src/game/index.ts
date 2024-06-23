@@ -160,3 +160,5 @@ export default class Game {
         return this.winner !== false;
     }
 }
+
+export type GameStats = ReturnType<Game["getStats"]>;
