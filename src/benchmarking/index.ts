@@ -9,7 +9,7 @@ import type { GameStats } from "$game/index";
 type BenchmarkOptions = {
     iterations: number;
     threads: number;
-    brainFileNames: String[];
+    brainFileNames: string[];
 }
 
 enum BenchmarkThreadStatus {
