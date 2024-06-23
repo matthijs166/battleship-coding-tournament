@@ -43,6 +43,7 @@ export default class Benchmark {
     threads: BenchmarkThread[] = [];
     options: BenchmarkOptions;
     tournament: BenchmarkTournament[] = [];
+    renderLoop: Timer;
 
     constructor(options: BenchmarkOptions) {
         this.options = options;
@@ -50,10 +51,23 @@ export default class Benchmark {
         this.generateTournament();
         this.bootThreads();        
 
-        setInterval(() => {
+        this.renderLoop = setInterval(() => {
             this.render();
-            // TODO: BREAK LOOP IF ALL THREADS ARE DONE
-        }, 100);
+            if (this.allThreadsIdle()) {
+                clearInterval(this.renderLoop);
+                this.clearWorker();
+            }
+        }, 10);
+    }
+
+    allThreadsIdle() {
+        return this.threads.every((thread) => thread.status === BenchmarkThreadStatus.idle);
+    }
+
+    clearWorker() {
+        this.threads.forEach((thread) => {
+            thread.worker.terminate();
+        })
     }
 
     generateTournament() {
