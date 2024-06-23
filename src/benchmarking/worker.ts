@@ -1,6 +1,7 @@
 import { expect } from "bun:test";
 import Game, { type GameStats } from "../game";
 import Brain from "$game/objects/brain";
+import brainLoader from "$utils/brainLoader";
 
 let threadId: number;
 let gameId: number;
@@ -84,13 +85,7 @@ async function loadBrainFile(file: String){
         return brainCache.get(file);
     }
 
-    let brain = await import("../brains/" + file + ".ts");
-    brain = brain.default;
-    
-    // assert brain is a Brain class
-    if (!(brain.prototype instanceof Brain)) {
-        throw new Error("Brain: " + file + " is not a Brain class");
-    }
+    const brain = await brainLoader(file);
 
     // update brain cache
     brainCache.set(file, brain);
