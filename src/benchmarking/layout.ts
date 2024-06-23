@@ -1,17 +1,7 @@
 import Chart, { ChartColors } from "./chart";
 
 export type LayoutData = {
-    brainStats:
-        {
-            name: string;
-            winRate: number;
-            loseRate: number;
-            takenHits: number;
-            givenHits: number;
-            // avgTurnTime: number;
-            // crashes: number;
-            color: ChartColors;
-        }[],
+    brainStats: BrainStat[],
     progress: {
         current: number;
         total: number;
@@ -22,6 +12,17 @@ export type LayoutData = {
             load: number;
         }
     ]
+}
+
+export type BrainStat = {
+    name: string;
+    winRate: number;
+    loseRate: number;
+    takenHits: number;
+    givenHits: number;
+    // avgTurnTime: number;
+    crashes: number;
+    color: ChartColors;
 }
 
 const chartWidth = 50;
