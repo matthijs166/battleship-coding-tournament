@@ -118,19 +118,22 @@ export function renderLayout(data: LayoutData) {
     // avgTurnTimeChart.render();
 
     // Crashes
-    // const crashesChart = new Chart({
-    //     width: chartWidth,
-    //     xOffSet: 10,
-    //     title: "Crashes"
-    // })
-    // data.brainStats.forEach((brainStat) => {
-    //     crashesChart.addBar({
-    //         value: brainStat.crashes,
-    //         color: brainStat.color,
-    //         name: brainStat.name
-    //     })
-    // })
-    // crashesChart.render();
+    const crashesChart = new Chart({
+        width: chartWidth,
+        maxValue: data.brainStats.reduce((acc, brainStat) => Math.max(acc, brainStat.crashes), 0),
+        xOffSet: xOffSet,
+        title: "Crashes"
+    })
+    // sort by crashes
+    data.brainStats.sort((a, b) => b.crashes - a.crashes)
+    data.brainStats.forEach((brainStat) => {
+        crashesChart.addBar({
+            value: brainStat.crashes,
+            color: brainStat.color,
+            name: brainStat.name
+        })
+    })
+    crashesChart.render();
 
     // Progress
     const progressChart = new Chart({
