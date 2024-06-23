@@ -1,6 +1,6 @@
 import type Brain from "$game/objects/brain";
 import { ChartColors } from "./chart";
-import { renderLayout } from "./layout";
+import { renderLayout, type BrainStat } from "./layout";
 import { Worker } from "worker_threads";
 import type { WorkerMessage } from "./worker";
 import logger from "$utils/logger";
@@ -192,35 +192,78 @@ export default class Benchmark {
         console.clear();
 
         renderLayout({
-                brainStats: [
-                    {
-                        name: "Brain 1",
-                        winRate: 0,
-                        loseRate: 0,
-                        takenHits: 0,
-                        givenHits: 0,
-                        color: ChartColors.red
-                    },
-                    {
-                        name: "Brain 2",
-                        winRate: 0,
-                        loseRate: 0,
-                        takenHits: 0,
-                        givenHits: 0,
-                        color: ChartColors.blue
-                    }
-                ],
-                progress: {
-                    current: this.tournament.filter((tournament) => tournament.status === BenchmarkTournamentStatus.done).length,
-                    total: this.options.iterations
-                },
-                CPUStats: [
-                    {
-                        core: 1,
-                        load: 0
-                    }
-                ]
-            })
+            brainStats: this.options.brainFileNames.map((brain, index) => this.generatePlayerStats(index)),
+            progress: {
+                current: this.tournament.filter((tournament) => tournament.status === BenchmarkTournamentStatus.done).length,
+                total: this.options.iterations
+            },
+            CPUStats: [
+                {
+                    core: 1,
+                    load: 0
+                }
+            ]
+        })
+
+        logger.printAll(5);
+    }
+
+    generatePlayerStats(id: number): BrainStat{
+        
+        let stats: BrainStat = {
+            name: this.options.brainFileNames[id],
+            winRate: 0,
+            loseRate: 0,
+            takenHits: 0,
+            givenHits: 0,
+            crashes: 0,
+            color: Object.values(ChartColors)[id]
+        }
+
+        // loop through all tournaments
+        this.tournament.forEach((tournament) => {
+
+            if (!tournament.stats) return
+
+            // count wins 
+            if (tournament.brain1.id === id && tournament.stats.winner === 1) {
+                stats.winRate++;
+            } else if (tournament.brain2.id === id && tournament.stats.winner === 2) {
+                stats.winRate++;
+            }
+
+            // count loses
+            if (tournament.brain1.id === id && tournament.stats.winner === 2) {
+                stats.loseRate++;
+            } else if (tournament.brain2.id === id && tournament.stats.winner === 1) {
+                stats.loseRate++;
+            }
+
+            // count hits taken
+            if (tournament.brain1.id === id) {
+                stats.takenHits += tournament.stats.player1.hitsTaken
+            } else if (tournament.brain2.id === id) {
+                stats.takenHits += tournament.stats?.player2.hitsTaken
+            }
+
+            // count hits given
+            if (tournament.brain1.id === id) {
+                stats.givenHits += tournament.stats.player1.hitsGiven
+            } else if (tournament.brain2.id === id) {
+                stats.givenHits += tournament.stats?.player2.hitsGiven
+            }
+
+            // count crashes
+            if (tournament.brain1.id === id && tournament.stats.playerCrashedGame === 1) {
+                stats.crashes++;
+            } else if (tournament.brain2.id === id && tournament.stats.playerCrashedGame === 2) {
+                stats.crashes++;
+            }
+
+
+        })
+
+        return stats;
     }
 
 }
