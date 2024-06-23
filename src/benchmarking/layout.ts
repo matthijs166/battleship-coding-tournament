@@ -36,8 +36,7 @@ export function renderLayout(data: LayoutData) {
     // Win Rate
     const winChart = new Chart({
         width: chartWidth,
-        maxValue: 100,
-        xOffSet: 10,
+        maxValue: data.brainStats.reduce((acc, brainStat) => Math.max(acc, brainStat.winRate), 0),
         xOffSet: xOffSet,
         title: "Wining Rate"
     })
@@ -55,8 +54,7 @@ export function renderLayout(data: LayoutData) {
     // Lose Rate
     const loseChart = new Chart({
         width: chartWidth,
-        maxValue: 100,
-        xOffSet: 10,
+        maxValue: data.brainStats.reduce((acc, brainStat) => Math.max(acc, brainStat.loseRate), 0),
         xOffSet: xOffSet,
         title: "Losing Rate"
     })
@@ -74,8 +72,7 @@ export function renderLayout(data: LayoutData) {
     // Taken Hits
     const takenHitsChart = new Chart({
         width: chartWidth,
-        maxValue: 100,
-        xOffSet: 10,
+        maxValue: data.brainStats.reduce((acc, brainStat) => Math.max(acc, brainStat.takenHits), 0),
         xOffSet: xOffSet,
         title: "Taken Hits"
     })
@@ -93,8 +90,7 @@ export function renderLayout(data: LayoutData) {
     // Given Hits
     const givenHitsChart = new Chart({
         width: chartWidth,
-        maxValue: 100,
-        xOffSet: 10,
+        maxValue: data.brainStats.reduce((acc, brainStat) => Math.max(acc, brainStat.givenHits), 0),
         xOffSet: xOffSet,
         title: "Given Hits"
     })
@@ -112,7 +108,6 @@ export function renderLayout(data: LayoutData) {
     // Average Turn Time
     // const avgTurnTimeChart = new Chart({
     //     width: chartWidth,
-    //     xOffSet: 10,
     //     xOffSet: xOffSet,
     //     title: "Average Turn Time"
     // })
@@ -147,7 +142,6 @@ export function renderLayout(data: LayoutData) {
     const progressChart = new Chart({
         width: chartWidth,
         maxValue: data.progress.total,
-        xOffSet: 10,
         xOffSet: xOffSet,
         title: "Benchmark progress:"
     })
@@ -162,7 +156,6 @@ export function renderLayout(data: LayoutData) {
     const cpuLoadChart = new Chart({
         width: chartWidth,
         maxValue: 100,
-        xOffSet: 10,
         xOffSet: xOffSet,
         title: "CPU Load"
     })
