@@ -47,8 +47,21 @@ export default class Game {
     }
 
     start(){
-        this.player1.start();
-        this.player2.start();
+        // Place ships for both players
+        try {
+            this.player1.start();
+        } catch (error){
+            logger.error("Error starting player 1");
+            this.playerCrashedGame = this.player1;
+        }
+        try {
+            this.player2.start();
+        } catch (error){
+            logger.error("Error starting player 2");
+            this.playerCrashedGame = this.player2;
+        }
+
+        this.checkForGameOver();
 
         this.player1.playboard.lock()
         this.player2.playboard.lock();
