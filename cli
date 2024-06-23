@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DIR=$(cd $(dirname $0); pwd)
+cd $DIR
+args=$@
+
+# Add watch mode if --dev is passed
+runWatch=""
+if [ "$1" == "--dev" ]; then
+  runWatch=--watch
+  shift
+fi
+# Remove --dev from the args
+args=$(echo $args | sed 's/--dev//g')
+
+bun $runWatch ./src/index.ts $args
