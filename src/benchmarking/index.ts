@@ -31,8 +31,14 @@ enum BenchmarkTournamentStatus {
 }
 
 type BenchmarkTournament = {
-    brain1: String;
-    brain2: String;
+    brain1: {
+        id: number;
+        fileName: String;
+    };
+    brain2: {
+        id: number;
+        fileName: String;
+    };
     id: number;
     status: BenchmarkTournamentStatus;
     stats?: GameStats;
@@ -71,11 +77,16 @@ export default class Benchmark {
     }
 
     generateTournament() {
+        // generate ids for each brain
+        const brainFileNames = this.options.brainFileNames.map((brain, index) => {
+            return brain + "[_]" + index;
+        })
+
         // generate all permutations
         let permutations = [];
-        for (let i = 0; i < this.options.brainFileNames.length; i++) {
-            for (let j = i + 1; j < this.options.brainFileNames.length; j++) {
-                permutations.push([this.options.brainFileNames[i], this.options.brainFileNames[j]]);
+        for (let i = 0; i < brainFileNames.length; i++) {
+            for (let j = i + 1; j < brainFileNames.length; j++) {
+                permutations.push([brainFileNames[i], brainFileNames[j]]);
             }
         }
 
@@ -84,8 +95,14 @@ export default class Benchmark {
         let tournamentId = 0;
         while (this.tournament.length < this.options.iterations) {
             const tournamentRound: BenchmarkTournament = {
-                brain1: permutations[i][0],
-                brain2: permutations[i][1],
+                brain1: {
+                    fileName: permutations[i][0].split("[_]")[0],
+                    id: parseInt(permutations[i][0].split("[_]")[1])
+                },
+                brain2: {
+                    fileName: permutations[i][1].split("[_]")[0],
+                    id: parseInt(permutations[i][1].split("[_]")[1])
+                },
                 status: BenchmarkTournamentStatus.open,
                 id: tournamentId
             }
@@ -159,8 +176,8 @@ export default class Benchmark {
         this.sendWorkerMessage({
             type: "startGame",
             threadId: threadId,
-            brainFile1: tournament.brain1,
-            brainFile2: tournament.brain2,
+            brainFile1: tournament.brain1.fileName,
+            brainFile2: tournament.brain2.fileName,
             gameId: tournament.id
         });
 
