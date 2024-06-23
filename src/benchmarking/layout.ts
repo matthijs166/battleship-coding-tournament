@@ -26,6 +26,7 @@ export type BrainStat = {
 }
 
 const chartWidth = 50;
+const xOffSet = 20;
 
 export function renderLayout(data: LayoutData) {
     if (!data) {
@@ -37,6 +38,7 @@ export function renderLayout(data: LayoutData) {
         width: chartWidth,
         maxValue: 100,
         xOffSet: 10,
+        xOffSet: xOffSet,
         title: "Wining Rate"
     })
     data.brainStats.forEach((brainStat) => {
@@ -53,6 +55,7 @@ export function renderLayout(data: LayoutData) {
         width: chartWidth,
         maxValue: 100,
         xOffSet: 10,
+        xOffSet: xOffSet,
         title: "Losing Rate"
     })
     data.brainStats.forEach((brainStat) => {
@@ -69,6 +72,7 @@ export function renderLayout(data: LayoutData) {
         width: chartWidth,
         maxValue: 100,
         xOffSet: 10,
+        xOffSet: xOffSet,
         title: "Taken Hits"
     })
     data.brainStats.forEach((brainStat) => {
@@ -85,6 +89,7 @@ export function renderLayout(data: LayoutData) {
         width: chartWidth,
         maxValue: 100,
         xOffSet: 10,
+        xOffSet: xOffSet,
         title: "Given Hits"
     })
     data.brainStats.forEach((brainStat) => {
@@ -100,6 +105,7 @@ export function renderLayout(data: LayoutData) {
     // const avgTurnTimeChart = new Chart({
     //     width: chartWidth,
     //     xOffSet: 10,
+    //     xOffSet: xOffSet,
     //     title: "Average Turn Time"
     // })
     // data.brainStats.forEach((brainStat) => {
@@ -131,6 +137,7 @@ export function renderLayout(data: LayoutData) {
         width: chartWidth,
         maxValue: data.progress.total,
         xOffSet: 10,
+        xOffSet: xOffSet,
         title: "Benchmark progress:"
     })
     progressChart.addBar({
@@ -145,6 +152,7 @@ export function renderLayout(data: LayoutData) {
         width: chartWidth,
         maxValue: 100,
         xOffSet: 10,
+        xOffSet: xOffSet,
         title: "CPU Load"
     })
     data.CPUStats.forEach((coreStat, i) => {
