@@ -42,7 +42,6 @@ export default class BarChart {
         console.log("\x1b[0m");
         
         let header = this.options.title ? this.options.title : "Bar Chart";
-        header += "\n";
         let barLines: String[] = []
 
         console.log(header);
