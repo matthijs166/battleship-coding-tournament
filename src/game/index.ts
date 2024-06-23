@@ -21,6 +21,7 @@ export default class Game {
     player2: Player;
     playerTurn: 1 | 2 = 1;
     winner: Player | false = false;
+    playerCrashedGame: Player | false = false;
     renderSettings: RenderSettings;
     turnCount: number = 0;
     simulationSpeed: number;
@@ -76,13 +77,20 @@ export default class Game {
         this.updatePlayerData();
 
         // Attack the enemy player
-        const attackCoords = currentPlayer.turn();
-        if (!attackCoords){
-            logger.error("No attack coordinates returned from player " + currentPlayer.name);
-            return;
+        try {
+            const attackCoords = currentPlayer.turn();
+            if (!attackCoords){
+                logger.error("No attack coordinates returned from player " + currentPlayer.name);
+                return;
+            }
+            const {x, y} = attackCoords;
+            enemyPlayer.playboard.receiveAttack(x, y);
+        } catch (error){
+            logger.error("Error during player " + currentPlayer.name + " turn");
+            
+            this.playerCrashedGame = currentPlayer;            
         }
-        const {x, y} = attackCoords;
-        enemyPlayer.playboard.receiveAttack(x, y);
+
 
         // finish the turn
         this.playerTurn = this.playerTurn === 1 ? 2 : 1;
@@ -93,12 +101,19 @@ export default class Game {
     }
 
     checkForGameOver(){
+        // Normal game over
         if (this.player1.allShipsSunk()){
             this.winner = this.player2;
             logger.log("Player 2 wins!");
         } else if (this.player2.allShipsSunk()){
             this.winner = this.player1;
             logger.log("Player 1 wins!");
+        }
+
+        // Player crashed game
+        if (this.playerCrashedGame){
+            this.winner = this.playerCrashedGame === this.player1 ? this.player2 : this.player1;
+            logger.log("Player " + this.playerCrashedGame.name + " crashed the game. Player " + this.winner.name + " wins!");
         }
     }
 
@@ -155,6 +170,7 @@ export default class Game {
         return {
             totalTurns: this.turnCount,
             winner: this.winner === this.player1 ? 1 : 2,
+            playerCrashedGame: this.playerCrashedGame ? this.playerCrashedGame === this.player1 ? 1 : 2 : false,
             player1: {
                 hitsTaken: player1TotalHits,
                 hitsGiven: player2TotalHits,
