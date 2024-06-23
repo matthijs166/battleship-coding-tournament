@@ -45,6 +45,14 @@ export default class BasicOptimized extends Brain {
 
     turn(){
         const cell = this.getRandomOpenCell();
+
+        if (!cell){
+            return {
+                x: 0,
+                y: 0
+            }
+        }
+
         return {
             x: cell.x,
             y: cell.y
