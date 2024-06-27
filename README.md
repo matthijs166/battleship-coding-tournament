@@ -187,3 +187,5 @@ Open voor suggestions and PR's
 - Implementing  OpenSkill for benchmark matchmaking
 - Clear rules about what you can use inside a brain
 - Leader board for best brains submitted
+
+Build to play on a friday [@volcano](https://volcano.nl) :)
