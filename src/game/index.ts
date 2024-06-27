@@ -13,7 +13,8 @@ export type GameArgs = {
 
 type RenderSettings = {
     fullGameRender: boolean,
-    stepMode: boolean
+    stepMode: boolean,
+    disableLogRender: boolean
 }
 
 export default class Game {
@@ -38,7 +39,8 @@ export default class Game {
 
         this.settings = args.settings || {
             fullGameRender: true,
-            stepMode: false
+            stepMode: false,
+            disableLogRender: false,
         };
 
 
@@ -190,7 +192,10 @@ export default class Game {
 
         console.log("");
         console.log("");
-        logger.printAll(20);
+        
+        if (!this.settings.disableLogRender) {
+            logger.printAll(15);
+        }
     }
 
     getStats(){
