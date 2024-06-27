@@ -8,12 +8,12 @@ import { ShipState } from "./objects/ship";
 export type GameArgs = {
     player1Brain: BrainConstructor,
     player2Brain: BrainConstructor,
-    renderSettings?: RenderSettings,
+    settings?: RenderSettings,
     simulationSpeed?: number
 }
 
 type RenderSettings = {
-    fullGame: boolean
+    fullGameRender: boolean
 }
 
 export default class Game {
@@ -22,7 +22,7 @@ export default class Game {
     playerTurn: 1 | 2 = 1;
     winner: Player | false = false;
     playerCrashedGame: Player | false = false;
-    renderSettings: RenderSettings;
+    settings: RenderSettings;
     turnCount: number = 0;
     simulationSpeed: number;
 
@@ -36,8 +36,8 @@ export default class Game {
             args.player2Brain
         );
 
-        this.renderSettings = args.renderSettings || {
-            fullGame: true
+        this.settings = args.settings || {
+            fullGameRender: true
         };
 
 
@@ -147,7 +147,7 @@ export default class Game {
     }
 
     render(){
-        if (!this.renderSettings.fullGame){
+        if (!this.settings.fullGameRender){
             return;
         }
         // clear the screen
