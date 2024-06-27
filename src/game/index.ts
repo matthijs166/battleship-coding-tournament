@@ -1,9 +1,8 @@
 import logger from "$utils/logger";
-import BasicBrain from "src/brains/basic";
 import Player from "./objects/player";
 import type { BrainConstructor, brainGameData } from "./objects/brain";
 import { CellState } from "./objects/playboardCell";
-import { ShipState } from "./objects/ship";
+import readline from "readline";
 
 export type GameArgs = {
     player1Brain: BrainConstructor,
@@ -13,7 +12,8 @@ export type GameArgs = {
 }
 
 type RenderSettings = {
-    fullGameRender: boolean
+    fullGameRender: boolean,
+    stepMode: boolean
 }
 
 export default class Game {
@@ -37,7 +37,8 @@ export default class Game {
         );
 
         this.settings = args.settings || {
-            fullGameRender: true
+            fullGameRender: true,
+            stepMode: false
         };
 
 
@@ -76,7 +77,29 @@ export default class Game {
                     this.updateTick();
                 }
             }, this.simulationSpeed);
-        } else {
+        }
+        else if (this.settings.stepMode){
+            // wait for user input to trigger next turn
+            const rl = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+            const trigger = (callback: Function) => {
+                rl.question(
+                    // in green
+                    "\x1b[32mPress enter for next turn\x1b[37m", 
+                    () => {
+                    this.updateTick();
+                    if (!this.winner){
+                        callback(callback);
+                        return
+                    }
+                    rl.close();
+                });
+            }
+            trigger(trigger);
+        }
+        else {
             while(!this.winner){
                 this.updateTick();
             }
