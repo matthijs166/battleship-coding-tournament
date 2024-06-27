@@ -8,13 +8,13 @@ export type GameArgs = {
     player1Brain: BrainConstructor,
     player2Brain: BrainConstructor,
     settings?: RenderSettings,
-    simulationSpeed?: number
 }
 
 type RenderSettings = {
     fullGameRender: boolean,
     stepMode: boolean,
-    disableLogRender: boolean
+    disableLogRender: boolean,
+    simulationSpeed: number,
 }
 
 export default class Game {
@@ -25,7 +25,6 @@ export default class Game {
     playerCrashedGame: Player | false = false;
     settings: RenderSettings;
     turnCount: number = 0;
-    simulationSpeed: number;
 
     constructor(args: GameArgs){
         this.player1 = new Player(
@@ -41,10 +40,8 @@ export default class Game {
             fullGameRender: true,
             stepMode: false,
             disableLogRender: false,
+            simulationSpeed: -1
         };
-
-
-        this.simulationSpeed = args.simulationSpeed || -1;
 
         this.render();
     }
@@ -71,14 +68,14 @@ export default class Game {
 
         this.render();
 
-        if (this.simulationSpeed > 0){
+        if (this.settings.simulationSpeed > 0){
             const interval = setInterval(() => {
                 if (this.winner){
                     clearInterval(interval);
                 } else {
                     this.updateTick();
                 }
-            }, this.simulationSpeed);
+            }, this.settings.simulationSpeed);
         }
         else if (this.settings.stepMode){
             // wait for user input to trigger next turn
