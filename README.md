@@ -1,4 +1,4 @@
-# battleship-coding-tournament
+# Battleship-coding-tournament
 You play Battleship with code. Program your own AI and compete against others.
 First, you need to know the rules of the game [Rules](https://www.hasbro.com/common/instruct/battleship.pdf)
 
@@ -20,7 +20,7 @@ bun install
 In the folder `/src/brains/` you can find pre-made brains. You can use the brains as starting point for your own AI. The basic brains just do random moves until the game is over.
 
 ## How to place ships
-In Your brain, you have to implement the *start()* method. This method is called once at the beginning of the game. You have to place your ships on the board.
+In Your brain, you have to implement the *start()* method. This method is called once at the beginning of the game. You have to place all your ships on the board.
 ```ts
 start() {
     // Select the first ship
@@ -70,15 +70,30 @@ type brainGameData = {
 
 ### Handy functions in the brainGameData
 ```ts
-this.brainGameData.myBoard // Your board
-this.brainGameData.myBoard.getAllCells() // Get all cells of your board in a 2D array
-this.brainGameData.myBoard.getCellsByState(enum CellState) // Get a 2D array of all cells with a specific state, check the CellState enum for all states
-this.brainGameData.myBoard.cells // Is the 3D array of all cells
-const cell = this.brainGameData.myBoard.cells[2][3] // Gets a cell at x: 2, y: 3
-cell.state // The state of the cell
-cell.shipRef // Reference to the ship on the cell (enemy ships are not visible)
-cell.x // X coordinate of the cell
-cell.y // Y coordinate of the cell
+ // Your board
+this.brainGameData.myBoard
+
+ // Get all cells of your board in a 2D array
+this.brainGameData.myBoard.getAllCells()
+
+// Get a 2D array of all cells with a specific state, check the CellState enum for all states
+this.brainGameData.myBoard.getCellsByState(enum CellState) 
+
+// Is the 3D array of all cells
+this.brainGameData.myBoard.cells 
+
+// Gets a cell at x: 2, y: 3
+const cell = this.brainGameData.myBoard.cells[2][3] 
+
+// The state of the cell
+cell.state 
+
+// Reference to the ship on the cell (enemy ships are not visible)
+cell.shipRef 
+
+// X,Y coordinate of the cell
+cell.x
+cell.y
 ```
 
 ## How to store some data in your brain
@@ -138,9 +153,9 @@ This mode is for debugging and testing your AI.
 ```
 
 ## Benchmark
-This mode is for when you want to simulate multiple brains against each other. This will benchmark the performance against multiple brains.
+This mode is for when you want to simulate multiple brains against each other to mesure the performance.
 
-The benchmark will run x amount of games in parallel and will match each brain equally against each other to see who wins the most games.
+The benchmark will run X amount of games in parallel and will match each brain equally against each other to see who wins the most games.
 
 ```bash
 # Will run the benchmark with multiple brains
@@ -162,8 +177,8 @@ The benchmark will run x amount of games in parallel and will match each brain e
 ```
 
 # TODO - What to implement next?
-[] Web socket server and client
-[] Web socket leaderboard
-[] Log Average turn time
-[] Show system resources used in the benchmark
-[] Implementing  OpenSkill for benchmark matchmaking
+- Web socket server and client
+- Web socket leaderboard
+- Log Average turn time
+- Show system resources used in the benchmark
+- Implementing  OpenSkill for benchmark matchmaking
