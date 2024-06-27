@@ -19,32 +19,6 @@ bun install
 # How to Brain
 In the folder `/src/brains/` you can find pre-made brains. You can use the brains as starting point for your own AI. The basic brains just do random moves until the game is over.
 
-## Game data
-To know what is happening in the game, you have inside access to brainGameData.
-All the data is a deepCopy of the game data and will reset in the next turn.
-```ts
-this.brainGameData: brainGameData
-
-type brainGameData = {
-    myBoard: Playboard,
-    myShips: Ship[] | undefined,
-    enemyBoard: Playboard | undefined
-}
-```
-
-### Handy functions in the brainGameData
-```ts
-this.brainGameData.myBoard // Your board
-this.brainGameData.myBoard.getAllCells() // Get all cells of your board in a 2D array
-this.brainGameData.myBoard.getCellsByState(enum CellState) // Get a 2D array of all cells with a specific state, check the CellState enum for all states
-this.brainGameData.myBoard.cells // Is the 3D array of all cells
-const cell = this.brainGameData.myBoard.cells[2][3] // Gets a cell at x: 2, y: 3
-cell.state // The state of the cell
-cell.shipRef // Reference to the ship on the cell (enemy ships are not visible)
-cell.x // X coordinate of the cell
-cell.y // Y coordinate of the cell
-```
-
 ## How to place ships
 In Your brain, you have to implement the *start()* method. This method is called once at the beginning of the game. You have to place your ships on the board.
 ```ts
@@ -79,6 +53,32 @@ turn(){
         y: Math.floor(Math.random() * 10)
     }
 }
+```
+
+## Game data
+To know what is happening in the game, you have inside access to brainGameData.
+All the data is a deepCopy of the game data and will reset in the next turn.
+```ts
+this.brainGameData: brainGameData
+
+type brainGameData = {
+    myBoard: Playboard,
+    myShips: Ship[] | undefined,
+    enemyBoard: Playboard | undefined
+}
+```
+
+### Handy functions in the brainGameData
+```ts
+this.brainGameData.myBoard // Your board
+this.brainGameData.myBoard.getAllCells() // Get all cells of your board in a 2D array
+this.brainGameData.myBoard.getCellsByState(enum CellState) // Get a 2D array of all cells with a specific state, check the CellState enum for all states
+this.brainGameData.myBoard.cells // Is the 3D array of all cells
+const cell = this.brainGameData.myBoard.cells[2][3] // Gets a cell at x: 2, y: 3
+cell.state // The state of the cell
+cell.shipRef // Reference to the ship on the cell (enemy ships are not visible)
+cell.x // X coordinate of the cell
+cell.y // Y coordinate of the cell
 ```
 
 ## How to store some data in your brain
