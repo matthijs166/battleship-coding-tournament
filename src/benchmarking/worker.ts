@@ -60,8 +60,11 @@ addEventListener("message", async (event) => {
         const game = new Game({
             player1Brain: await loadBrainFile(message.brainFile1),
             player2Brain: await loadBrainFile(message.brainFile2),
-            renderSettings: {
-                fullGame: false
+            settings: {
+                fullGameRender: false,
+                disableLogRender: true,
+                simulationSpeed: -1,
+                stepMode: false
             }
         })
 
