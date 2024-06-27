@@ -118,6 +118,7 @@ We got two modes to run the game:
 This mode is for debugging and testing your AI.
 ```bash
  # Run a single game with two basic brains. First brain is player 1 and seccond brain is player 2
+ # The brain name is equal to the filename of the brain you want to load
  ./cli --run --brain basic,basicOptimized
 
 # Run a single game with two basic brains without rendering
