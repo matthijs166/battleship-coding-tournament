@@ -153,19 +153,19 @@ export function renderLayout(data: LayoutData) {
     progressChart.render();
 
     // CPU Load
-    const cpuLoadChart = new Chart({
-        width: chartWidth,
-        maxValue: 100,
-        xOffSet: xOffSet,
-        title: "CPU Load"
-    })
-    data.CPUStats.forEach((coreStat, i) => {
-        cpuLoadChart.addBar({
-            value: coreStat.load,
-            color: i % 2 === 0 ? ChartColors.green : ChartColors.red,
-            name: "Core " + coreStat.core
-        })
-    })
-    cpuLoadChart.render();
+    // const cpuLoadChart = new Chart({
+    //     width: chartWidth,
+    //     maxValue: 100,
+    //     xOffSet: xOffSet,
+    //     title: "CPU Load"
+    // })
+    // data.CPUStats.forEach((coreStat, i) => {
+    //     cpuLoadChart.addBar({
+    //         value: coreStat.load,
+    //         color: i % 2 === 0 ? ChartColors.green : ChartColors.red,
+    //         name: "Core " + coreStat.core
+    //     })
+    // })
+    // cpuLoadChart.render();
 
 }
