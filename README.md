@@ -176,9 +176,14 @@ The benchmark will run X amount of games in parallel and will match each brain e
 ./cli --benchmark --brain basic,basicOptimized  --iterations 10
 ```
 
+# Suggestions & Scores
+Open voor suggestions and PR's
+
 # TODO - What to implement next?
 - Web socket server and client
 - Web socket leaderboard
 - Log Average turn time
 - Show system resources used in the benchmark
 - Implementing  OpenSkill for benchmark matchmaking
+- Clear rules about what you can use inside a brain
+- Leader board for best brains submitted
