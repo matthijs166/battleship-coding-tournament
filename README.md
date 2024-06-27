@@ -1,9 +1,9 @@
 # battleship-coding-tournament
-You play battleship with code. Program you own AI and compete against others.
-First you need to know the rules of the game [Rules](https://www.hasbro.com/common/instruct/battleship.pdf)
+You play Battleship with code. Program your own AI and compete against others.
+First, you need to know the rules of the game [Rules](https://www.hasbro.com/common/instruct/battleship.pdf)
 
 # Dependencies
-This project is made with Bun. Bun is a simple and fast build tool for Node.js. You can find more information about Bun [here](https://bun.sh/docs/installation)
+This project was made with Bun. Bun is a simple and fast-build tool for Node.js. You can find more information about Bun [here](https://bun.sh/docs/installation)
 
 Or install bun via NPM:
 ```bash
@@ -20,7 +20,7 @@ bun install
 In the folder `/src/brains/` you can find pre-made brains. You can use the brains as starting point for your own AI. The basic brains just do random moves until the game is over.
 
 ## Game data
-To know what is happning in the game you have inside a access to brainGameData.
+To know what is happening in the game, you have inside access to brainGameData.
 All the data is a deepCopy of the game data and will reset in the next turn.
 ```ts
 this.brainGameData: brainGameData
@@ -46,7 +46,7 @@ cell.y // Y coordinate of the cell
 ```
 
 ## How to place ships
-In Your brain you have to implement the *start()* method. This method is called once at the beginning of the game. You have to place your ships on the board.
+In Your brain, you have to implement the *start()* method. This method is called once at the beginning of the game. You have to place your ships on the board.
 ```ts
 start() {
     // Select the first ship
@@ -70,7 +70,7 @@ start() {
 ```
 
 ## How to make a move
-In your brain you have to implement the *turn()* method. This method is called every turn. In this method you return a X and Y coordinate to hit on you opponents board. Keep in mind that you can hit the same cell multiple times.
+In your brain, you have to implement the *turn()* method. This method is called every turn. In this method, you return an X and Y coordinate to hit on your opponent's board. Keep in mind that you can hit the same cell multiple times.
 ```ts
 turn(){
     // Hit a random cell on the enemy playboard
@@ -82,7 +82,7 @@ turn(){
 ```
 
 ## How to store some data in your brain
-The brain class will be created once at the beginning of the game. You can store data in the brain class and access it in the *start()* and *turn()* method. Keep in mind that between games the brain class will be reset and all data will be lost.
+The brain class will be created once at the beginning of the game. You can store data in the brain class and access it in the *start()* and *turn()* methods. Keep in mind that between games, the brain class will be reset and all data will be lost.
 ```ts
 export default class BasicBrain extends Brain {
     // declare a variable in the upper scope of the class
@@ -110,7 +110,7 @@ logger.queue // contains all the logs lines
 ```
 
 # Running the game
-We got two modes to run the game:
+We have two modes to run the game:
 - Single game
 - Benchmark
 
@@ -137,10 +137,10 @@ This mode is for debugging and testing your AI.
 ./cli --run --brain basic,basicOptimized --dev --simulationSpeed 1000 
 ```
 
-## Bencmark
-This mode is for when you want to simulate multiple brains against each other. This wil benchmark the performance against multiple brains.
+## Benchmark
+This mode is for when you want to simulate multiple brains against each other. This will benchmark the performance against multiple brains.
 
-The benchmark will run x amount of games in parrallel and wil match each brain equally against each other to see who wins the most games.
+The benchmark will run x amount of games in parallel and will match each brain equally against each other to see who wins the most games.
 
 ```bash
 # Will run the benchmark with multiple brains
@@ -161,9 +161,9 @@ The benchmark will run x amount of games in parrallel and wil match each brain e
 ./cli --benchmark --brain basic,basicOptimized  --iterations 10
 ```
 
-# TODO - what to implement next?
-[] Websocket server and client
-[] Websocket leaderboard
+# TODO - What to implement next?
+[] Web socket server and client
+[] Web socket leaderboard
 [] Log Average turn time
 [] Show system resources used in the benchmark
-[] Implementing open skill for benchmark match making
+[] Implementing  OpenSkill for benchmark matchmaking
