@@ -6,7 +6,7 @@ args=$@
 
 # Add watch mode if --dev is passed
 runWatch=""
-if [ "$1" == "--dev" ]; then
+if [ -n "$(echo $args | grep -- --dev)" ]; then
   runWatch=--watch
   shift
 fi
