@@ -10,6 +10,7 @@ type BenchmarkOptions = {
     iterations: number;
     threads: number;
     brainFileNames: string[];
+    chartWidth?: number
 }
 
 enum BenchmarkThreadStatus {
@@ -197,12 +198,7 @@ export default class Benchmark {
                 current: this.tournament.filter((tournament) => tournament.status === BenchmarkTournamentStatus.done).length,
                 total: this.options.iterations
             },
-            CPUStats: [
-                {
-                    core: 1,
-                    load: 0
-                }
-            ]
+            chartWidth: this.options.chartWidth
         })
 
         logger.printAll(5);

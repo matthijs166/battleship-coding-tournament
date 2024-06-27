@@ -6,12 +6,7 @@ export type LayoutData = {
         current: number;
         total: number;
     }
-    CPUStats: [
-        {
-            core: number;
-            load: number;
-        }
-    ]
+    chartWidth?: number;
 }
 
 export type BrainStat = {
@@ -25,10 +20,12 @@ export type BrainStat = {
     color: ChartColors;
 }
 
-const chartWidth = 50;
-const xOffSet = 20;
+
 
 export function renderLayout(data: LayoutData) {
+    let chartWidth: number = isNaN(data.chartWidth ?? NaN) ? 50 : data.chartWidth ?? 50;
+    const xOffSet = 15;
+
     if (!data) {
         return;
     }
