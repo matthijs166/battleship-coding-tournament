@@ -18,13 +18,25 @@ let args = parseArgs({
             type: 'string',
             multiple: true,
         },
+        disableRender: {
+            type: 'boolean',
+        },
+        stepMode: {
+            type: 'boolean',
+        },
+        disableLogRender: {
+            type: 'boolean'
+        },
+        chartWidth: {
+            type: 'string',
+        },
         threads: {
             type: 'string',
             default: '4',
         },
         iterations: {
             type: 'string',
-            default: '100',
+            default: '1000',
         },
         simulationSpeed: {
             type: 'string',
@@ -58,11 +70,13 @@ else if (args.run) {
 
 async function runBenchmark() {
     new Benchmark({
-        iterations: 1000,
-        threads: 10,
-        brainFileNames: args.brain!
+        iterations: parseInt(args.iterations ?? "1000"),
+        threads: parseInt(args.threads ?? "4"),
+        brainFileNames: args.brain!,
+        chartWidth: parseInt(args.chartWidth ?? "")
     })
 }
+
 
 async function runGame() {
     console.log("Running game");
@@ -70,10 +84,12 @@ async function runGame() {
     const game = new Game({
         player1Brain: await brainLoader(args.brain![0]),
         player2Brain: await brainLoader(args.brain![1]),
-        renderSettings: {
-            fullGame: true
+        settings: {
+            fullGameRender: !args.disableRender,
+            stepMode: args.stepMode ?? false,
+            disableLogRender: args.disableLogRender ?? false,
+            simulationSpeed: parseInt(args.simulationSpeed ?? "-1")
         },
-        simulationSpeed: parseInt(args.simulationSpeed ?? "-1")
     })
     game.start();
     const stats = game.getStats()
