@@ -1,10 +1,9 @@
 import { parseArgs } from "util";
 import Benchmark from "./benchmarking";
-import Game from "./game";
+import Game from "./game/default";
 import brainLoader from "$utils/brainLoader";
 
-
-let args = parseArgs({
+export let args = parseArgs({
     args: Bun.argv,
     tokens: true,
     options: {
@@ -77,7 +76,6 @@ async function runBenchmark() {
     })
 }
 
-
 async function runGame() {
     console.log("Running game");
     
@@ -88,8 +86,8 @@ async function runGame() {
             fullGameRender: !args.disableRender,
             stepMode: args.stepMode ?? false,
             disableLogRender: args.disableLogRender ?? false,
-            simulationSpeed: parseInt(args.simulationSpeed ?? "-1")
-        },
+            simulationSpeed: parseInt(args.simulationSpeed ?? "-1"),
+        }
     })
     game.start();
     const stats = game.getStats()

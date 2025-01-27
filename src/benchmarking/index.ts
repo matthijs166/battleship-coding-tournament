@@ -4,7 +4,7 @@ import { renderLayout, type BrainStat } from "./layout";
 import { Worker } from "worker_threads";
 import type { WorkerMessage } from "./worker";
 import logger from "$utils/logger";
-import type { GameStats } from "$game/index";
+import type { GameStats } from "$game/default";
 
 type BenchmarkOptions = {
     iterations: number;
