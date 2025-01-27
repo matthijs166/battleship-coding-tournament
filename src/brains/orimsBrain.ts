@@ -2,14 +2,16 @@ import Brain from "$game/objects/brain";
 import PlayboardCell, { CellState } from "$game/objects/playboardCell";
 import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
-import type { Turn } from "$game/objects/brain";
+import type { attackTypes, Turn } from "$game/objects/brain";
 
 export default class OrimsBrain extends Brain {
     name = "orims Brain";
     memory = {
         lasthit: undefined as { x: number, y: number } | undefined,
         placedship: [] as { x: number, y: number, orientation: ShipOrientation }[],
-        shots: [] as { x: number, y: number }[]
+        shots: [] as { x: number, y: number }[],
+        crossLimits: 4,
+        bombLimits: 2
     };
 
     start(){
@@ -57,6 +59,9 @@ export default class OrimsBrain extends Brain {
         const openCells = this.brainGameData.enemyBoard?.getCellsByState(CellState.empty) || [];
         return openCells;
     }
+    getState(e: { x: number, y: number }): CellState {
+        return this.brainGameData.enemyBoard?.cells[e.x][e.y].state || CellState.empty;
+    }
 
     turn(): Turn {
         if (!this.memory.lasthit) {
@@ -68,7 +73,7 @@ export default class OrimsBrain extends Brain {
             const randomIndex = Math.floor(Math.random() * openCells.length);
             const target = openCells[randomIndex];
             this.memory.lasthit = target;
-            return { x: target.x, y: target.y, attack: "bomb" };
+            return this.chooseAttack(target, false);
         }
 
         let openCells = this.getOpenCells();
@@ -79,7 +84,7 @@ export default class OrimsBrain extends Brain {
 
         let target;
 
-        if (this.memory.lasthit) {
+        if (this.getState(this.memory.lasthit) === CellState.hit) {
             let hit = this.memory.lasthit;
             let potentialTargets = [
                 { x: hit.x + 1, y: hit.y },
@@ -99,6 +104,21 @@ export default class OrimsBrain extends Brain {
         }
 
         this.memory.lasthit = target;
-        return { x: target.x, y: target.y, attack: "bomb" };
+        return this.chooseAttack(target, true);
+    }
+
+    chooseAttack(target: { x: number, y: number }, isKnownShip: boolean): Turn {
+        const attackType = Math.random();
+        let attack: attackTypes = "default";
+        if (isKnownShip) {
+            if (attackType < 0.2 && this.memory.crossLimits > 0) {
+                attack = "cross";
+                this.memory.crossLimits--;
+            } else if (attackType < 0.4 && this.memory.bombLimits > 0) {
+                attack = "bomb";
+                this.memory.bombLimits--;
+            }
+        }
+        return { x: target.x, y: target.y, attack };
     }
 }

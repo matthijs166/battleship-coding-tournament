@@ -129,9 +129,11 @@ export default class Game {
             } else if (attack === "cross" && this.crossLimits[`player${this.playerTurn}`] > 0){
                 enemyPlayer.playboard.useCross(x, y);
                 this.crossLimits[`player${this.playerTurn}`]--;
+                currentPlayer.brain.memory.crossLimits = this.crossLimits[`player${this.playerTurn}`];
             } else if (attack === "bomb" && this.bombLimits[`player${this.playerTurn}`] > 0){
                 enemyPlayer.playboard.useBomb(x, y);
                 this.bombLimits[`player${this.playerTurn}`]--;
+                currentPlayer.brain.memory.bombLimits = this.bombLimits[`player${this.playerTurn}`];
             } else {
                 logger.error("Invalid attack type or limit exceeded for player " + currentPlayer.name);
             }
