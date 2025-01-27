@@ -116,11 +116,93 @@ export default class Playboard{
         }
         return shipCells;
     }
+    useBomb(x: number, y: number) {
+        // check if the cell is in bounds
+        if(x >= this.xSize || y >= this.ySize){
+            logger.error("Cell out of bounds to target anyting");
+            return false;
+        }
+
+        const cellsToCheck = [
+            { x, y }, // center
+            { x: x - 1, y }, // left
+            { x: x + 1, y }, // right
+            { x, y: y - 1 }, // top
+            { x, y: y + 1 },  // bottom
+            { x: x - 1, y: y - 1 }, // top left
+            { x: x + 1, y: y - 1 },  // top right
+            { x: x + 1, y: y + 1 }, // bottom right
+            { x: x - 1, y: y + 1 }, // bottom left
+        ];
+
+        cellsToCheck.forEach(({ x, y }) => {
+            if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
+                const cell = this.cells[x][y];
+
+                // check if state of the cell is already hit or missed
+                if(cell.state === CellState.hit || cell.state === CellState.miss){
+                    logger.warning(`Cell already targeted before`);
+                    return;
+                }
+
+                if(cell.state === CellState.ship){
+                    cell.updateState(CellState.hit);
+                    logger.log(`Ship hit!`);
+                    this.validateShipIntegrity(cell.shipRef as Ship);
+                }
+                else{
+                    cell.updateState(CellState.miss);
+                    logger.log(`Miss!`);
+                }
+            }
+        });
+
+        return true;
+    }
+    useCross(x: number, y: number) {
+        // check if the cell is in bounds
+        if(x >= this.xSize || y >= this.ySize){
+            logger.error("Cell out of bounds to target anything");
+            return false;
+        }
+
+        const cellsToCheck = [
+            { x, y }, // center
+            { x: x - 1, y }, // left
+            { x: x + 1, y }, // right
+            { x, y: y - 1 }, // top
+            { x, y: y + 1 }  // bottom
+        ];
+
+        cellsToCheck.forEach(({ x, y }) => {
+            if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
+                const cell = this.cells[x][y];
+
+                // check if state of the cell is already hit or missed
+                if(cell.state === CellState.hit || cell.state === CellState.miss){
+                    logger.warning(`Cell already targeted before`);
+                    return;
+                }
+
+                if(cell.state === CellState.ship){
+                    cell.updateState(CellState.hit);
+                    logger.log(`Ship hit!`);
+                    this.validateShipIntegrity(cell.shipRef as Ship);
+                }
+                else{
+                    cell.updateState(CellState.miss);
+                    logger.log(`Miss!`);
+                }
+            }
+        });
+
+        return true;
+    }
 
     receiveAttack(x: number, y: number){
         // check if the cell is in bounds
         if(x >= this.xSize || y >= this.ySize){
-            logger.error("Cell out of bounds to target anyting");
+            logger.error("Cell out of bounds to target anything");
             return false;
         }
 

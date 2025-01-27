@@ -27,6 +27,8 @@ export default class PlayboardCell{
                 return CellEmojiDisplay.miss;
             case CellState.ship:
                 return this.shipRef?.emoji || CellEmojiDisplay.ship;
+            case CellState.unkown:
+                return CellEmojiDisplay.unkown;
         }
     }
 
@@ -40,12 +42,14 @@ export enum CellState {
     empty = "empty",
     ship = "ship",
     hit = "hit",
-    miss = "miss"
+    miss = "miss",
+    unkown = "unkown"
 }
 
 enum CellEmojiDisplay {
     empty = "🟦",
     ship = "🚢",
     hit = "💥",
-    miss = "⬜"
+    miss = "⬜",
+    unkown = "❔"
 }

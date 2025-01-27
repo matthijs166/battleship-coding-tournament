@@ -14,7 +14,7 @@ abstract class Brain {
 
     abstract start(): void;
 
-    abstract turn(): {x: number, y: number} | undefined;
+    abstract turn(): Turn | undefined;
 
     updateBrain(brainGameData: brainGameData): void {
         this.brainGameData = brainGameData;
@@ -33,4 +33,11 @@ export type brainGameData = {
     myBoard: Playboard,
     myShips: Ship[] | undefined,
     enemyBoard: Playboard | undefined
+}
+export type attackTypes = "default" | "bomb" | "cross";
+
+export type Turn = {
+    x: number,
+    y: number,
+    attack: attackTypes
 }

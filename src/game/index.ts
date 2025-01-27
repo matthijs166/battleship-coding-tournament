@@ -25,6 +25,8 @@ export default class Game {
     playerCrashedGame: Player | false = false;
     settings: RenderSettings;
     turnCount: number = 0;
+    bombLimits: { player1: number, player2: number };
+    crossLimits: { player1: number, player2: number };
 
     constructor(args: GameArgs){
         this.player1 = new Player(
@@ -42,6 +44,9 @@ export default class Game {
             disableLogRender: false,
             simulationSpeed: -1
         };
+
+        this.bombLimits = { player1: 2, player2: 2 };
+        this.crossLimits = { player1: 4, player2: 4 };
 
         this.render();
     }
@@ -118,14 +123,23 @@ export default class Game {
                 logger.error("No attack coordinates returned from player " + currentPlayer.name);
                 return;
             }
-            const {x, y} = attackCoords;
-            enemyPlayer.playboard.receiveAttack(x, y);
+            const {x, y, attack} = attackCoords;
+            if (attack === "default"){
+                enemyPlayer.playboard.receiveAttack(x, y);
+            } else if (attack === "cross" && this.crossLimits[`player${this.playerTurn}`] > 0){
+                enemyPlayer.playboard.useCross(x, y);
+                this.crossLimits[`player${this.playerTurn}`]--;
+            } else if (attack === "bomb" && this.bombLimits[`player${this.playerTurn}`] > 0){
+                enemyPlayer.playboard.useBomb(x, y);
+                this.bombLimits[`player${this.playerTurn}`]--;
+            } else {
+                logger.error("Invalid attack type or limit exceeded for player " + currentPlayer.name);
+            }
         } catch (error){
             logger.error("Error during player " + currentPlayer.name + " turn");
             
             this.playerCrashedGame = currentPlayer;            
         }
-
 
         // finish the turn
         this.playerTurn = this.playerTurn === 1 ? 2 : 1;

@@ -1,4 +1,4 @@
-import Brain from "$game/objects/brain";
+import Brain, { type attackTypes, type Turn } from "$game/objects/brain";
 import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
 
@@ -33,12 +33,21 @@ export default class BasicBrain extends Brain {
         }
 
     }
+    turn(): Turn{
+        const x = Math.floor(Math.random() * 10);
+        const y = Math.floor(Math.random() * 10);
+        const attackType = Math.random();
+        let attack: attackTypes = "default";
+        if (attackType < 0.1) {
+            attack = "bomb";
+        } else if (attackType < 0.2) {
+            attack = "cross";
+        }
 
-    turn(){
-        // Hit a random cell on the enemy playboard
         return {
-            x: Math.floor(Math.random() * 10),
-            y: Math.floor(Math.random() * 10)
+            x,
+            y,
+            attack
         }
     }
 }
