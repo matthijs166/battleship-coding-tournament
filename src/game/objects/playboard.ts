@@ -2,6 +2,7 @@ import Ship, { ShipOrientation, ShipState } from "./ship";
 import logger from "$utils/logger";
 import PlayboardCell, { CellState } from "./playboardCell";
 import { deepClone } from "$utils/general";
+import Mine, { MineState } from "./mine";
 
 export default class Playboard{
     xSize: number = 10;
@@ -79,6 +80,32 @@ export default class Playboard{
         }
 
         ship.updateState(ShipState.alive);
+
+        return true;
+    }
+
+    placeMine(args: placeMineArgs): boolean {
+        const { mine, x, y } = args;
+
+        // check if the cell is in bounds
+        if (y >= this.ySize || x >= this.xSize) {
+            logger.error("Mine not placed. Mine is out of bounds");
+            return false;
+        }
+
+        const cell = this.cells[y][x];
+
+        // Check if the cell is not occupied
+        if (cell.state === CellState.ship || cell.state === CellState.mine) {
+            logger.error("Mine not placed. Cell is occupied by a ship or another mine");
+            return false;
+        }
+
+        // Update the cell
+        cell.setMineRef(mine);
+        cell.updateState(CellState.mine);
+
+        mine.updateState(MineState.active);
 
         return true;
     }
@@ -289,4 +316,11 @@ export type placeShipArgs = {
     orientation: ShipOrientation
 }
 
+export type placeMineArgs = {
+    mine: Mine,
+    x: number,
+    y: number
+}
+
 export type placeShipCallback = (args: placeShipArgs) => boolean;
+export type placeMineCallback = (args: placeMineArgs) => boolean;

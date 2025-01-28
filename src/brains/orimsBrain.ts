@@ -3,13 +3,13 @@ import PlayboardCell, { CellState } from "$game/objects/playboardCell";
 import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
 import type { attackTypes, Turn } from "$game/objects/brain";
-import fs from 'fs';
 
 export default class OrimsBrain extends Brain {
     name = "orims Brain";
     memory = {
         lasthit: undefined as { x: number, y: number } | undefined,
         placedship: [] as { x: number, y: number, orientation: ShipOrientation }[],
+        placedmine: [] as { x: number, y: number }[],
         shots: [] as { x: number, y: number }[],
         crossLimits: 4,
         bombLimits: 2,
@@ -56,6 +56,36 @@ export default class OrimsBrain extends Brain {
             }
         }
 
+        // if (!this.brainGameData.mymines) {
+        //     logger.error("No mines defined for player");
+        //     return;
+        // }
+        // for (let mine of this.brainGameData.mymines){
+        //     let placed = false;
+        //     while(!placed){
+        //         const x = Math.floor(Math.random() * 10);
+        //         const y = Math.floor(Math.random() * 10);
+
+        //         // Check if the new mine placement is too close to existing mines
+        //         const isTooClose = this.memory.placedmine.some(placedmine => {
+        //             const distanceX = Math.abs(placedmine.x - x);
+        //             const distanceY = Math.abs(placedmine.y - y);
+        //             return distanceX <= 1 && distanceY <= 1;
+        //         });
+
+        //         if (isTooClose) continue;
+
+        //         placed = this.placeMine({
+        //             mine,
+        //             x,
+        //             y,
+        //         });
+
+        //         if (placed) {
+        //             this.memory.placedmine.push({ x, y });
+        //         }
+        //     }
+        // }
     }
 
     getOpenCells() {
@@ -120,8 +150,8 @@ export default class OrimsBrain extends Brain {
                 this.memory.lasthit = this.memory.hitShips.pop();
                 if (this.memory.lasthit && 
                     (this.getState(this.memory.lasthit) === CellState.hit || 
-                     this.getState(this.memory.lasthit) === CellState.unkown || 
-                     this.getState(this.memory.lasthit) === CellState.empty)) {
+                        this.getState(this.memory.lasthit) === CellState.unkown || 
+                        this.getState(this.memory.lasthit) === CellState.empty)) {
                     return this.turn(); // Retry turn with the previous hit
                 }
             }

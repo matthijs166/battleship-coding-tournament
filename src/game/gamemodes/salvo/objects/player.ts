@@ -4,14 +4,16 @@ import type Brain from "./brain";
 import type { BrainConstructor, brainGameData } from "./brain";
 import Playboard, { type placeShipArgs } from "./playboard";
 import Ship, { shipTypes, ShipState } from "./ship";
+import Mine, { MineState } from "./mine";
 
-export default class Player{
+export default class Player {
     name: string;
     playboard: Playboard;
     ships: Ship[];
     brain: Brain;
+    mines: Mine[] = [];
 
-    constructor(name: string, brain: BrainConstructor){
+    constructor(name: string, brain: BrainConstructor) {
         this.name = name;
         this.playboard = new Playboard();
         this.ships = [
@@ -35,13 +37,21 @@ export default class Player{
                 type: shipTypes.destroyer,
                 size: 2
             })
-        ]
+        ];
+        this.mines = [
+            new Mine({}),
+            new Mine({}),
+            new Mine({}),
+            new Mine({}),
+            new Mine({})
+        ];
 
         this.brain = new brain(
             {
                 myBoard: this.playboard.export(),
                 myShips: this.exportShips(),
-                enemyBoard: undefined
+                enemyBoard: undefined,
+                mymines: this.mines
             },
             (args) => {
                 return this.placeShip(args);
@@ -49,25 +59,26 @@ export default class Player{
         );
     }
 
-    start(){
+    start() {
         this.brain.start();
 
-        if (!this.allShipsPlaced()){
+        if (!this.allShipsPlaced()) {
             logger.warning("Not all ships are placed for player " + this.name);
         }
     }
 
-    updateBrain(brainGameData: brainGameData){
+    updateBrain(brainGameData: brainGameData) {
         this.brain.updateBrain(brainGameData);
     }
 
-    turn(){
-        return this.brain.turn();
+    turn() {
+        const result = this.brain.turn();
+        return result;
     }
 
-    placeShip(args: placeShipArgs){
+    placeShip(args: placeShipArgs) {
         const originalShip = this.ships.find(ship => ship.id === args.ship.id);
-        if (!originalShip){
+        if (!originalShip) {
             logger.error("Original Ship object not found anymore");
             return false;
         }
@@ -76,16 +87,24 @@ export default class Player{
         return this.playboard.placeShip(args);
     }
 
-    allShipsSunk(){
+    spawnMine(x: number, y: number) {
+        const mine = new Mine({});
+        mine.setPosition(x, y);
+        this.mines.push(mine);
+
+        const args = { mine, x, y };
+        return this.playboard.placeMine(args);
+    }
+
+    allShipsSunk() {
         return this.ships.every(ship => ship.state === ShipState.sunk);
     }
 
-    allShipsPlaced(){
+    allShipsPlaced() {
         return this.ships.every(ship => ship.state === ShipState.alive);
     }
 
-    exportShips(){
+    exportShips() {
         return deepClone(this.ships);
     }
-
 }

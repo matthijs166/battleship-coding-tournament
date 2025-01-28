@@ -1,4 +1,5 @@
-import type { placeShipArgs, placeShipCallback } from "./playboard";
+import type Mine from "./mine";
+import type { placeMineArgs, placeMineCallback, placeShipArgs, placeShipCallback } from "./playboard";
 import type Playboard from "./playboard";
 import type Ship from "./ship";
 abstract class Brain {
@@ -6,10 +7,12 @@ abstract class Brain {
     brainGameData: brainGameData;
     abstract memory: any;
     placeShipCallback: placeShipCallback;
+    placeMineCallback: placeMineCallback;
 
-    constructor(brainGameData: brainGameData, placeShipCallback: placeShipCallback){
+    constructor(brainGameData: brainGameData, placeShipCallback: placeShipCallback, placeMineCallback: placeMineCallback) {
         this.brainGameData = brainGameData;
         this.placeShipCallback = placeShipCallback;
+        this.placeMineCallback = placeMineCallback;
     }
 
     abstract start(): void;
@@ -23,20 +26,20 @@ abstract class Brain {
     placeShip(args: placeShipArgs){
         return this.placeShipCallback(args);
     }
-
-    useRadar(x: number, y: number) {
-        return this.brainGameData.myBoard.useRadar(x, y);
+    placeMine(args: placeMineArgs){
+        return this.placeMineCallback(args);
     }
 }
 
 export default Brain;
 
-export type BrainConstructor = new (brainGameData: brainGameData, placeShipCallback: placeShipCallback) => Brain;
+export type BrainConstructor = new (brainGameData: brainGameData, placeShipCallback: placeShipCallback, placeMineCallback: placeMineCallback) => Brain;
 
 export type brainGameData = {
     myBoard: Playboard,
     myShips: Ship[] | undefined,
     enemyBoard: Playboard | undefined
+    mymines: Mine[] | undefined
 }
 export type attackTypes = "default" | "bomb" | "cross" | "radar";
 

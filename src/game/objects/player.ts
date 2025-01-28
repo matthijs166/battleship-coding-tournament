@@ -4,12 +4,14 @@ import type Brain from "./brain";
 import type { BrainConstructor, brainGameData } from "./brain";
 import Playboard, { type placeShipArgs } from "./playboard";
 import Ship, { shipTypes, ShipState } from "./ship";
+import Mine, { MineState } from "./mine";
 
 export default class Player{
     name: string;
     playboard: Playboard;
     ships: Ship[];
     brain: Brain;
+    mines: Mine[];
 
     constructor(name: string, brain: BrainConstructor){
         this.name = name;
@@ -36,15 +38,36 @@ export default class Player{
                 size: 2
             })
         ]
+        this.mines = [
+            new Mine({
+                state: MineState.active
+            }),
+            new Mine({
+                state: MineState.active
+            }),
+            new Mine({
+                state: MineState.active
+            }),
+            new Mine({
+                state: MineState.active
+            }),
+            new Mine({
+                state: MineState.active
+            })
+        ];
 
         this.brain = new brain(
             {
                 myBoard: this.playboard.export(),
                 myShips: this.exportShips(),
-                enemyBoard: undefined
+                enemyBoard: undefined,
+                mymines: this.mines
             },
             (args) => {
                 return this.placeShip(args);
+            },
+            (args) => {
+                return this.spawnMine(args.x, args.y);
             }
         );
     }
@@ -76,6 +99,15 @@ export default class Player{
         args.y = args.x;
 
         return this.playboard.placeShip(args);
+    }
+
+    spawnMine(x: number, y: number) {
+        const mine = new Mine({});
+        mine.setPosition(x, y);
+        this.mines.push(mine);
+
+        const args = { mine, x, y };
+        return this.playboard.placeMine(args);
     }
 
     allShipsSunk(){

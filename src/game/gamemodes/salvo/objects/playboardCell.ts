@@ -1,4 +1,5 @@
 import type Ship from "./ship";
+import type Mine from "./mine";
 
 export default class PlayboardCell{
     x: number;
@@ -6,6 +7,7 @@ export default class PlayboardCell{
     state: CellState = CellState.unkown;
     emoji: string = CellEmojiDisplay.unkown;
     shipRef: Ship | null = null;
+    mineRef: Mine | null = null;
 
     constructor(x: number, y: number){
         this.x = x;
@@ -41,6 +43,11 @@ export default class PlayboardCell{
     setShipRef(ship: Ship){
         this.shipRef = ship;
         this.updateState(CellState.ship);
+    }
+
+    setMineRef(mine: Mine) {
+        this.mineRef = mine;
+        this.updateState(CellState.mine);
     }
 }
 
