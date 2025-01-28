@@ -66,19 +66,6 @@ export default class OrimsBrain extends Brain {
     }
 
     turn(): Turn {
-        const cellStates: { x: number, y: number, state: CellState }[] = [];
-
-        // Iterate through each cell and check its CellState
-        for (let x = 0; x < 10; x++) {
-            for (let y = 0; y < 10; y++) {
-                const cellState = this.getState({ x, y });
-                cellStates.push({ x, y, state: cellState });
-            }
-        }
-
-        // Save cell states to a JSON file
-        fs.writeFileSync('cellStates.json', JSON.stringify(cellStates, null, 2));
-
         if (!this.memory.lasthit) {
             const openCells = this.getOpenCells();
             if (openCells.length === 0) {
