@@ -3,8 +3,8 @@ import type Ship from "./ship";
 export default class PlayboardCell{
     x: number;
     y: number;
-    state: CellState = CellState.empty;
-    emoji: string = CellEmojiDisplay.empty;
+    state: CellState = CellState.unkown;
+    emoji: string = CellEmojiDisplay.unkown;
     shipRef: Ship | null = null;
 
     constructor(x: number, y: number){
@@ -13,7 +13,7 @@ export default class PlayboardCell{
     }
 
     updateState(newState: CellState){
-        if (this.state === CellState.unkown && newState !== CellState.mine) {
+        if (this.state === CellState.unkown && newState !== CellState.mine && newState !== CellState.ship) {
             this.state = CellState.empty;
         } else {
             this.state = newState;

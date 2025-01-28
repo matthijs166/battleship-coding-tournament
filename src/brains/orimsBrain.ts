@@ -58,11 +58,11 @@ export default class OrimsBrain extends Brain {
     }
 
     getOpenCells() {
-        const openCells = this.brainGameData.enemyBoard?.getCellsByState(CellState.empty) || [];
+        const openCells = this.brainGameData.enemyBoard?.getCellsByState(CellState.unkown) || [];
         return openCells;
     }
     getState(e: { x: number, y: number }): CellState {
-        return this.brainGameData.enemyBoard?.cells[e.x][e.y].state || CellState.empty;
+        return this.brainGameData.enemyBoard?.cells[e.x][e.y].state || CellState.unkown;
     }
 
     turn(): Turn {

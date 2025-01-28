@@ -37,7 +37,7 @@ export default class BasicOptimized extends Brain {
     }
 
     getRandomOpenCell() : PlayboardCell{
-        const openCells: PlayboardCell[] = this.brainGameData.enemyBoard?.getCellsByState(CellState.empty) || [];
+        const openCells: PlayboardCell[] = this.brainGameData.enemyBoard?.getCellsByState(CellState.unkown) || [];
 
         // return random cell in cells
         return openCells[Math.floor(Math.random() * openCells.length)];

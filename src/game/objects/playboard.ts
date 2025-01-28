@@ -75,6 +75,7 @@ export default class Playboard{
         // Update the cells
         for(let cell of shipCells){
             cell.setShipRef(ship);
+            cell.updateState(CellState.ship); // Ensure the state is set to ship
         }
 
         ship.updateState(ShipState.alive);
@@ -137,27 +138,7 @@ export default class Playboard{
 
         cellsToCheck.forEach(({ x, y }) => {
             if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
-                const cell = this.cells[y][x];
-
-                if (cell.state === CellState.unkown) {
-                    cell.updateState(CellState.empty);
-                }
-
-                // check if state of the cell is already hit or missed
-                if(cell.state === CellState.hit || cell.state === CellState.miss){
-                    logger.warning(`Cell already targeted before`);
-                    return;
-                }
-
-                if(cell.state === CellState.ship){
-                    cell.updateState(CellState.hit);
-                    logger.log(`Ship hit!`);
-                    this.validateShipIntegrity(cell.shipRef as Ship);
-                }
-                else{
-                    cell.updateState(CellState.miss);
-                    logger.log(`Miss!`);
-                }
+                this.receiveAttack(x, y);
             }
         });
 
@@ -180,27 +161,7 @@ export default class Playboard{
 
         cellsToCheck.forEach(({ x, y }) => {
             if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
-                const cell = this.cells[y][x];
-
-                if (cell.state === CellState.unkown) {
-                    cell.updateState(CellState.empty);
-                }
-
-                // check if state of the cell is already hit or missed
-                if(cell.state === CellState.hit || cell.state === CellState.miss){
-                    logger.warning(`Cell already targeted before`);
-                    return;
-                }
-
-                if(cell.state === CellState.ship){
-                    cell.updateState(CellState.hit);
-                    logger.log(`Ship hit!`);
-                    this.validateShipIntegrity(cell.shipRef as Ship);
-                }
-                else{
-                    cell.updateState(CellState.miss);
-                    logger.log(`Miss!`);
-                }
+                this.receiveAttack(x, y);
             }
         });
 
@@ -294,7 +255,7 @@ export default class Playboard{
         boardCopy.cells.forEach(row => {
             row.forEach(cell => {
                 if(cell.state === CellState.ship){
-                    cell.updateState(CellState.empty);
+                    cell.updateState(CellState.unkown);
                 }
                 cell.shipRef = null;
             });
