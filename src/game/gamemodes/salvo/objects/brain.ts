@@ -23,10 +23,6 @@ abstract class Brain {
     placeShip(args: placeShipArgs){
         return this.placeShipCallback(args);
     }
-
-    useRadar(x: number, y: number) {
-        return this.brainGameData.myBoard.useRadar(x, y);
-    }
 }
 
 export default Brain;
@@ -38,7 +34,7 @@ export type brainGameData = {
     myShips: Ship[] | undefined,
     enemyBoard: Playboard | undefined
 }
-export type attackTypes = "default" | "bomb" | "cross" | "radar";
+export type attackTypes = "default" | "bomb" | "cross";
 
 export type Turn = {
     x: number,

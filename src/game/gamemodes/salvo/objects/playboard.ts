@@ -56,10 +56,10 @@ export default class Playboard{
         }
 
         ship.setOrientation(orientation);
-        ship.setPosition(y, x);
+        ship.setPosition(x, y);
         
         // check if the ship can be placed
-        if (!this.shipInBounds(ship, y, x)){
+        if (!this.shipInBounds(ship, x, y)){
             logger.error("Ship not placed. Ship is out of bounds");
             return false;
         }
@@ -83,19 +83,19 @@ export default class Playboard{
     }
 
     shipInBounds(ship: Ship, x: number, y: number) : boolean{
-        if (ship.orientation === ShipOrientation.vertical){
-            if(y + ship.size > this.ySize){
-                return false;
-            }
-            if (x >= this.xSize){
-                return false;
-            }
-        }
-        else if (ship.orientation === ShipOrientation.horizontal){
-            if(x + ship.size > this.xSize){                
+        if (ship.orientation === ShipOrientation.horizontal){
+            if(x + ship.size > this.xSize){
                 return false;
             }
             if (y >= this.ySize){
+                return false;
+            }
+        }
+        else if (ship.orientation === ShipOrientation.vertical){
+            if(y + ship.size > this.ySize){                
+                return false;
+            }
+            if (x >= this.xSize){
                 return false;
             }
         }
@@ -104,21 +104,21 @@ export default class Playboard{
 
     getShipCells(ship: Ship){
         let shipCells: PlayboardCell[] = [];
-        if(ship.orientation === ShipOrientation.vertical){
+        if(ship.orientation === ShipOrientation.horizontal){
             for(let i = 0; i < ship.size; i++){
-                shipCells.push(this.cells[ship.y][ship.x + i]);
+                shipCells.push(this.cells[ship.x + i][ship.y]);
             }
         }
-        else if(ship.orientation === ShipOrientation.horizontal){
+        else if(ship.orientation === ShipOrientation.vertical){
             for(let i = 0; i < ship.size; i++){
-                shipCells.push(this.cells[ship.y + i][ship.x]);
+                shipCells.push(this.cells[ship.x][ship.y + i]);
             }
         }
         return shipCells;
     }
     useBomb(x: number, y: number) {
         // check if the cell is in bounds
-        if(y >= this.ySize || x >= this.xSize){
+        if(x >= this.xSize || y >= this.ySize){
             logger.error("Cell out of bounds to target anyting");
             return false;
         }
@@ -137,7 +137,7 @@ export default class Playboard{
 
         cellsToCheck.forEach(({ x, y }) => {
             if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
-                const cell = this.cells[y][x];
+                const cell = this.cells[x][y];
 
                 if (cell.state === CellState.unkown) {
                     cell.updateState(CellState.empty);
@@ -165,7 +165,7 @@ export default class Playboard{
     }
     useCross(x: number, y: number) {
         // check if the cell is in bounds
-        if(y >= this.ySize || x >= this.xSize){
+        if(x >= this.xSize || y >= this.ySize){
             logger.error("Cell out of bounds to target anything");
             return false;
         }
@@ -180,7 +180,7 @@ export default class Playboard{
 
         cellsToCheck.forEach(({ x, y }) => {
             if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
-                const cell = this.cells[y][x];
+                const cell = this.cells[x][y];
 
                 if (cell.state === CellState.unkown) {
                     cell.updateState(CellState.empty);
@@ -207,47 +207,14 @@ export default class Playboard{
         return true;
     }
 
-    useRadar(x: number, y: number) {
-        // check if the cell is in bounds
-        if(y >= this.ySize || x >= this.xSize){
-            logger.error("Cell out of bounds to scan anything");
-            return false;
-        }
-
-        const cellsToCheck = [
-            { x, y }, // center
-            { x: x - 1, y }, // left
-            { x: x + 1, y }, // right
-            { x, y: y - 1 }, // top
-            { x, y: y + 1 },  // bottom
-            { x: x - 1, y: y - 1 }, // top left
-            { x: x + 1, y: y - 1 },  // top right
-            { x: x + 1, y: y + 1 }, // bottom right
-            { x: x - 1, y: y + 1 }, // bottom left
-        ];
-
-        const radarResults = cellsToCheck.map(({ x, y }) => {
-            if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
-                const cell = this.cells[y][x];
-                if (cell.state === CellState.unkown) {
-                    cell.updateState(CellState.empty);
-                }
-                return { x, y, state: cell.state };
-            }
-            return null;
-        }).filter(result => result !== null);
-
-        return radarResults;
-    }
-
     receiveAttack(x: number, y: number){
         // check if the cell is in bounds
-        if(y >= this.ySize || x >= this.xSize){
+        if(x >= this.xSize || y >= this.ySize){
             logger.error("Cell out of bounds to target anything");
             return false;
         }
 
-        const cell = this.cells[y][x];
+        const cell = this.cells[x][y];
 
         if (cell.state === CellState.unkown) {
             cell.updateState(CellState.empty);
@@ -263,11 +230,6 @@ export default class Playboard{
             cell.updateState(CellState.hit);
             logger.log("Ship hit!");
             this.validateShipIntegrity(cell.shipRef as Ship);
-        }
-        else if(cell.state === CellState.mine){
-            cell.updateState(CellState.hit);
-            logger.log("Mine hit!");
-            // Handle mine explosion logic if needed
         }
         else{
             cell.updateState(CellState.miss);
@@ -318,6 +280,39 @@ export default class Playboard{
     getCellsByState(cellState: CellState | undefined){
         return this.getAllCells()
             .filter(cell => cell.state === cellState || cellState === undefined);
+    }
+
+    useRadar(x: number, y: number) {
+        // check if the cell is in bounds
+        if(y >= this.ySize || x >= this.xSize){
+            logger.error("Cell out of bounds to scan anything");
+            return false;
+        }
+
+        const cellsToCheck = [
+            { x, y }, // center
+            { x: x - 1, y }, // left
+            { x: x + 1, y }, // right
+            { x, y: y - 1 }, // top
+            { x, y: y + 1 },  // bottom
+            { x: x - 1, y: y - 1 }, // top left
+            { x: x + 1, y: y - 1 },  // top right
+            { x: x + 1, y: y + 1 }, // bottom right
+            { x: x - 1, y: y + 1 }, // bottom left
+        ];
+
+        const radarResults = cellsToCheck.map(({ x, y }) => {
+            if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
+                const cell = this.cells[x][y];
+                if (cell.state === CellState.unkown) {
+                    cell.updateState(CellState.empty);
+                }
+                return { x, y, state: cell.state };
+            }
+            return null;
+        }).filter(result => result !== null);
+
+        return radarResults;
     }
 }
 

@@ -25,8 +25,8 @@ export default class Ship {
     }
 
     setPosition(x: number, y: number){
-        this.x = y;
-        this.y = x;
+        this.x = x;
+        this.y = y;
     }
 
     setOrientation(orientation: ShipOrientation){

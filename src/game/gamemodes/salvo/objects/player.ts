@@ -72,8 +72,6 @@ export default class Player{
             return false;
         }
         args.ship = originalShip;
-        args.x = args.y;
-        args.y = args.x;
 
         return this.playboard.placeShip(args);
     }

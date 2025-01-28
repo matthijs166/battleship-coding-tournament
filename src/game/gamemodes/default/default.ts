@@ -1,7 +1,7 @@
 import logger from "$utils/logger";
-import Player from "./objects/player";
-import type { BrainConstructor, brainGameData } from "./objects/brain";
-import { CellState } from "./objects/playboardCell";
+import Player from "$game/objects/player";
+import type { BrainConstructor, brainGameData } from "$game/objects/brain";
+import { CellState } from "$game/objects/playboardCell";
 import readline from "readline";
 
 export type GameArgs = {
@@ -27,6 +27,7 @@ export default class Game {
     turnCount: number = 0;
     bombLimits: { player1: number, player2: number };
     crossLimits: { player1: number, player2: number };
+    radarLimits: { player1: number, player2: number };
 
     constructor(args: GameArgs){
         this.player1 = new Player(
@@ -47,6 +48,7 @@ export default class Game {
 
         this.bombLimits = { player1: 2, player2: 2 };
         this.crossLimits = { player1: 4, player2: 4 };
+        this.radarLimits = { player1: 1, player2: 1 };
 
         this.render();
     }
@@ -125,15 +127,20 @@ export default class Game {
             }
             const {x, y, attack} = attackCoords;
             if (attack === "default"){
-                enemyPlayer.playboard.receiveAttack(x, y);
+                enemyPlayer.playboard.receiveAttack(y, x);
             } else if (attack === "cross" && this.crossLimits[`player${this.playerTurn}`] > 0){
-                enemyPlayer.playboard.useCross(x, y);
+                enemyPlayer.playboard.useCross(y, x);
                 this.crossLimits[`player${this.playerTurn}`]--;
                 currentPlayer.brain.memory.crossLimits = this.crossLimits[`player${this.playerTurn}`];
             } else if (attack === "bomb" && this.bombLimits[`player${this.playerTurn}`] > 0){
-                enemyPlayer.playboard.useBomb(x, y);
+                enemyPlayer.playboard.useBomb(y, x);
                 this.bombLimits[`player${this.playerTurn}`]--;
                 currentPlayer.brain.memory.bombLimits = this.bombLimits[`player${this.playerTurn}`];
+            } else if (attack === "radar" && this.radarLimits[`player${this.playerTurn}`] > 0) {
+                const radarResults = enemyPlayer.playboard.useRadar(y, x);
+                this.radarLimits[`player${this.playerTurn}`]--;
+                currentPlayer.brain.memory.radarLimits = this.radarLimits[`player${this.playerTurn}`];
+                logger.log(`Radar used! Results: ${JSON.stringify(radarResults)}`);
             } else {
                 logger.error("Invalid attack type or limit exceeded for player " + currentPlayer.name);
             }

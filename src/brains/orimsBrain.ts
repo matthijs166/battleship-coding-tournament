@@ -3,6 +3,7 @@ import PlayboardCell, { CellState } from "$game/objects/playboardCell";
 import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
 import type { attackTypes, Turn } from "$game/objects/brain";
+import fs from 'fs';
 
 export default class OrimsBrain extends Brain {
     name = "orims Brain";
@@ -11,7 +12,8 @@ export default class OrimsBrain extends Brain {
         placedship: [] as { x: number, y: number, orientation: ShipOrientation }[],
         shots: [] as { x: number, y: number }[],
         crossLimits: 4,
-        bombLimits: 2
+        bombLimits: 2,
+        radarLimits: 1 // Add radar limit to memory
     };
 
     start(){
@@ -64,6 +66,19 @@ export default class OrimsBrain extends Brain {
     }
 
     turn(): Turn {
+        const cellStates: { x: number, y: number, state: CellState }[] = [];
+
+        // Iterate through each cell and check its CellState
+        for (let x = 0; x < 10; x++) {
+            for (let y = 0; y < 10; y++) {
+                const cellState = this.getState({ x, y });
+                cellStates.push({ x, y, state: cellState });
+            }
+        }
+
+        // Save cell states to a JSON file
+        fs.writeFileSync('cellStates.json', JSON.stringify(cellStates, null, 2));
+
         if (!this.memory.lasthit) {
             const openCells = this.getOpenCells();
             if (openCells.length === 0) {
@@ -110,6 +125,8 @@ export default class OrimsBrain extends Brain {
     chooseAttack(target: { x: number, y: number }, isKnownShip: boolean): Turn {
         const attackType = Math.random();
         let attack: attackTypes = "default";
+        let radarLimits = this.memory.radarLimits; // Use local variable for radar limit
+
         if (isKnownShip) {
             if (attackType < 0.2 && this.memory.crossLimits > 0) {
                 attack = "cross";
@@ -117,8 +134,11 @@ export default class OrimsBrain extends Brain {
             } else if (attackType < 0.4 && this.memory.bombLimits > 0) {
                 attack = "bomb";
                 this.memory.bombLimits--;
+            } else if (attackType < 0.05 && radarLimits > 0) { // Very low chance for radar
+                attack = "radar";
+                radarLimits--;
             }
         }
-        return { x: target.x, y: target.y, attack };
+        return { x: target.x, y: target.y, attack: attack = "radar" };
     }
 }

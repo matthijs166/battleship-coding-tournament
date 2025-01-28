@@ -1,5 +1,5 @@
 import { expect } from "bun:test";
-import Game, { type GameStats } from "../game/default";
+import Game, { type GameStats } from "../game/gamemodes/default/default";
 import Brain from "$game/objects/brain";
 import brainLoader from "$utils/brainLoader";
 
