@@ -13,7 +13,8 @@ export default class OrimsBrain extends Brain {
         shots: [] as { x: number, y: number }[],
         crossLimits: 4,
         bombLimits: 2,
-        radarLimits: 1 // Add radar limit to memory
+        radarLimits: 1, // Add radar limit to memory
+        hitShips: [] as { x: number, y: number }[] // Add hitShips to memory
     };
 
     start(){
@@ -66,6 +67,20 @@ export default class OrimsBrain extends Brain {
     }
 
     turn(): Turn {
+        if (this.memory.radarLimits > 0) {
+            const openCells = this.getOpenCells();
+            if (openCells.length === 0) {
+                logger.error("No open cells available");
+                return { x: 0, y: 0, attack: "default" };
+            }
+            const randomIndex = Math.floor(Math.random() * openCells.length);
+            const target = openCells[randomIndex];
+            this.memory.radarLimits--;
+            const radarTurn = { x: target.x, y: target.y, attack: "radar" as attackTypes };
+            this.memory.lasthit = target;
+            return radarTurn;
+        }
+
         if (!this.memory.lasthit) {
             const openCells = this.getOpenCells();
             if (openCells.length === 0) {
@@ -87,6 +102,7 @@ export default class OrimsBrain extends Brain {
         let target;
 
         if (this.getState(this.memory.lasthit) === CellState.hit) {
+            this.memory.hitShips.push(this.memory.lasthit); // Store hit ship
             let hit = this.memory.lasthit;
             let potentialTargets = [
                 { x: hit.x + 1, y: hit.y },
@@ -98,6 +114,20 @@ export default class OrimsBrain extends Brain {
             target = potentialTargets.find(cell => 
                 openCells.some(openCell => openCell.x === cell.x && openCell.y === cell.y)
             );
+        } else {
+            // Step back if the last hit was not a ship
+            while (this.memory.hitShips.length > 0) {
+                this.memory.lasthit = this.memory.hitShips.pop();
+                if (this.memory.lasthit && 
+                    (this.getState(this.memory.lasthit) === CellState.hit || 
+                     this.getState(this.memory.lasthit) === CellState.unkown || 
+                     this.getState(this.memory.lasthit) === CellState.empty)) {
+                    return this.turn(); // Retry turn with the previous hit
+                }
+            }
+            // If all hitShips are empty or unknown, continue with other functions
+            this.memory.lasthit = undefined;
+            return this.turn();
         }
 
         if (!target) {
@@ -111,8 +141,8 @@ export default class OrimsBrain extends Brain {
 
     chooseAttack(target: { x: number, y: number }, isKnownShip: boolean): Turn {
         const attackType = Math.random();
-        let attack: attackTypes = "default";
         let radarLimits = this.memory.radarLimits; // Use local variable for radar limit
+        let attack: attackTypes = "default";
 
         if (isKnownShip) {
             if (attackType < 0.2 && this.memory.crossLimits > 0) {
@@ -126,6 +156,6 @@ export default class OrimsBrain extends Brain {
                 radarLimits--;
             }
         }
-        return { x: target.x, y: target.y, attack: attack = "radar" };
+        return { x: target.x, y: target.y, attack };
     }
 }
