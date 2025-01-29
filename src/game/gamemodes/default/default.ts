@@ -182,12 +182,14 @@ export default class Game {
         currentPlayer.updateBrain({
             myBoard: currentPlayer.playboard.export(),
             enemyBoard: enemyPlayer.playboard.exportMaskedForOpponent(),
-            myShips: currentPlayer.exportShips()
+            myShips: currentPlayer.exportShips(),
+            mymines: currentPlayer.exportMines()
         });
         enemyPlayer.updateBrain({
             myBoard: enemyPlayer.playboard.export(),
             enemyBoard: currentPlayer.playboard.exportMaskedForOpponent(),
-            myShips: enemyPlayer.exportShips()
+            myShips: enemyPlayer.exportShips(),
+            mymines: enemyPlayer.exportMines()
         });
     }
 

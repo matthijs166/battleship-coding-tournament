@@ -248,12 +248,16 @@ export default class Playboard {
     exportMaskedForOpponent() {
         const boardCopy: Playboard = deepClone(this);
 
-        // Remove any data about the ships
+        // Remove any data about the ships and mines
         boardCopy.cells.forEach(row => {
             row.forEach(cell => {
                 if (cell.state === CellState.ship) {
                     cell.updateState(CellState.unkown);
                 }
+                if (cell.state === CellState.mine) {
+                    cell.updateState(CellState.unkown);
+                }
+                cell.mineRef = null;
                 cell.shipRef = null;
             });
         });

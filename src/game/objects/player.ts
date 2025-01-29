@@ -122,4 +122,8 @@ export default class Player{
         return deepClone(this.ships);
     }
 
+    exportMines(){
+        return deepClone(this.mines);
+    }
+
 }

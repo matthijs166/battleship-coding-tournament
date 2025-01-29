@@ -76,8 +76,13 @@ export default class OrimsBrain extends Brain {
                     return distanceX <= 1 && distanceY <= 1;
                 });
                 
-                if (isTooClose) continue;
-                
+                // Check if there is a ship in the target cell
+                const isShipPresent = this.memory.placedship.some(placedShip => {
+                    return placedShip.x === x && placedShip.y === y;
+                });
+
+                if (isTooClose || isShipPresent) continue;
+
                 if (this.memory.maxmines > 0) {
                     this.memory.maxmines--;
                     placed = this.placeMine({
