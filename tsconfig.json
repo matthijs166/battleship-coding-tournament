@@ -16,6 +16,8 @@
     "paths": {
       "$utils/*": ["src/utils/*"],
       "$game/*": ["src/game/*"],
+      "$utilsold/*": ["src(old)/utils/*"],
+      "$gameold/*": ["src(old)/game/*"],
     },
 
 

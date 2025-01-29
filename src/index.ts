@@ -1,6 +1,9 @@
 import { parseArgs } from "util";
 import Benchmark from "./benchmarking";
 import { rungame } from "./game";
+import BenchmarkOld from "../src(old)/benchmarking";
+import rungameold  from "../src(old)/game";
+import { runBenchmarkOld, runGameOld } from "src(old)";
 
 export let args = parseArgs({
     args: Bun.argv,
@@ -61,24 +64,39 @@ if (args.brain?.length === 1) {
     console.log("We duplicate the brain for the second player")
     args.brain.push(args.brain[0])
 }
+if (args.gamemode === "old"){
+    // Run benchmarking or game
+    if (args.benchmark) {
+        runBenchmarkOldi()
+    }
+    else if (args.run) {
+        runGameOldi()
+    }
+    async function runBenchmarkOldi() {
+        runBenchmarkOld(args)
+    }
 
-// Run benchmarking or game
-if (args.benchmark) {
-    runBenchmark()
-}
-else if (args.run) {
-    runGame()
-}
+    async function runGameOldi() {
+        runGameOld(args)
+    }
+}else{
+    // Run benchmarking or game
+    if (args.benchmark) {
+        runBenchmark()
+    }
+    else if (args.run) {
+        runGame()
+    }
+    async function runBenchmark() {
+        new Benchmark({
+            iterations: parseInt(args.iterations ?? "1000"),
+            threads: parseInt(args.threads ?? "4"),
+            brainFileNames: args.brain!,
+            chartWidth: parseInt(args.chartWidth ?? "")
+        })
+    }
 
-async function runBenchmark() {
-    new Benchmark({
-        iterations: parseInt(args.iterations ?? "1000"),
-        threads: parseInt(args.threads ?? "4"),
-        brainFileNames: args.brain!,
-        chartWidth: parseInt(args.chartWidth ?? "")
-    })
-}
-
-async function runGame() {
-    rungame(args)
+    async function runGame() {
+        rungame(args)
+    }
 }

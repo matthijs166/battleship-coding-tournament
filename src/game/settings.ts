@@ -1,7 +1,7 @@
 export type Settings = {
     gamemode: string;
 }
-export type Args = "default" | "salvo";
+export type Args = "default" | "salvo" | "old";
 
 
 

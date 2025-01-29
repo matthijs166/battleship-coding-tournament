@@ -153,6 +153,9 @@ This mode is for debugging and testing your AI.
 
 # changes the gamemode of the game
 ./cli --run --brain basic,basicOptimized --gamemode salvo
+
+#use the old version
+./cli --run --brain basic,basicOptimized --gamemode old
 ```
 
 ## Benchmark
@@ -176,6 +179,9 @@ The benchmark will run X amount of games in parallel and will match each brain e
 # Set number of itterations, the number of total games played
 # Default is 1000
 ./cli --benchmark --brain basic,basicOptimized  --iterations 10
+
+#use the old version
+./cli --benchmark --brain basic,basicOptimized --gamemode old
 ```
 
 # Suggestions & Scores
