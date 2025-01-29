@@ -157,7 +157,7 @@ This mode is for debugging and testing your AI.
 
 ## Benchmark
 This mode is for when you want to simulate multiple brains against each other to mesure the performance.
-<br/> the mines do not work in the benchmark<br/>
+<br/>the mines do not work in the benchmark<br/>
 The benchmark will run X amount of games in parallel and will match each brain equally against each other to see who wins the most games.
 
 ```bash
