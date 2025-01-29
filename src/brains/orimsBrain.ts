@@ -14,7 +14,8 @@ export default class OrimsBrain extends Brain {
         crossLimits: 4,
         bombLimits: 2,
         radarLimits: 1, // Add radar limit to memory
-        hitShips: [] as { x: number, y: number }[] // Add hitShips to memory
+        hitShips: [] as { x: number, y: number }[], // Add hitShips to memory
+        maxmines: 5,
     };
 
     start(){
@@ -56,36 +57,45 @@ export default class OrimsBrain extends Brain {
             }
         }
 
-        // if (!this.brainGameData.mymines) {
-        //     logger.error("No mines defined for player");
-        //     return;
-        // }
-        // for (let mine of this.brainGameData.mymines){
-        //     let placed = false;
-        //     while(!placed){
-        //         const x = Math.floor(Math.random() * 10);
-        //         const y = Math.floor(Math.random() * 10);
+        if (!this.brainGameData.mymines) {
+            logger.error("No mines defined for player");
+            return;
+        }
 
-        //         // Check if the new mine placement is too close to existing mines
-        //         const isTooClose = this.memory.placedmine.some(placedmine => {
-        //             const distanceX = Math.abs(placedmine.x - x);
-        //             const distanceY = Math.abs(placedmine.y - y);
-        //             return distanceX <= 1 && distanceY <= 1;
-        //         });
+        // loop mines and try to place them randomly until all mines are placed
+        for (let mine of this.brainGameData.mymines) {
+            let placed = false;
+            while (!placed) {
+                const x = Math.floor(Math.random() * 10);
+                const y = Math.floor(Math.random() * 10);
+                
+                // Check if the new mine placement is too close to existing mines
+                const isTooClose = this.memory.placedmine.some(placedmine => {
+                    const distanceX = Math.abs(placedmine.x - x);
+                    const distanceY = Math.abs(placedmine.y - y);
+                    return distanceX <= 1 && distanceY <= 1;
+                });
+                
+                if (isTooClose) continue;
+                
+                if (this.memory.maxmines > 0) {
+                    this.memory.maxmines--;
+                    placed = this.placeMine({
+                        mine,
+                        x,
+                        y
+                    });
+                }
 
-        //         if (isTooClose) continue;
-
-        //         placed = this.placeMine({
-        //             mine,
-        //             x,
-        //             y,
-        //         });
-
-        //         if (placed) {
-        //             this.memory.placedmine.push({ x, y });
-        //         }
-        //     }
-        // }
+                if (placed) {
+                    this.memory.placedmine.push({ x, y });
+                    this.memory.maxmines - 1;
+                    if (this.memory.maxmines <= 0){
+                        return; // Add return statement to exit the loop
+                    }
+                }
+            }
+        }
     }
 
     getOpenCells() {

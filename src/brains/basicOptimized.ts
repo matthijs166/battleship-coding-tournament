@@ -5,7 +5,10 @@ import logger from "$utils/logger";
 
 export default class BasicOptimized extends Brain {
     name = "Basic Optimized";
-    memory = {};
+    memory = {
+        placedmine: [] as { x: number, y: number }[],
+        maxmines: 5,
+    };
     // brainGameData contains myBoard, myShips, enemyBoard
 
     start(){
@@ -33,6 +36,46 @@ export default class BasicOptimized extends Brain {
                 });
             }
         }
+
+        if (!this.brainGameData.mymines) {
+                    logger.error("No mines defined for player");
+                    return;
+                }
+        
+                // loop mines and try to place them randomly until all mines are placed
+                for (let mine of this.brainGameData.mymines) {
+                    let placed = false;
+                    while (!placed) {
+                        const x = Math.floor(Math.random() * 10);
+                        const y = Math.floor(Math.random() * 10);
+                        
+                        // Check if the new mine placement is too close to existing mines
+                        const isTooClose = this.memory.placedmine.some(placedmine => {
+                            const distanceX = Math.abs(placedmine.x - x);
+                            const distanceY = Math.abs(placedmine.y - y);
+                            return distanceX <= 1 && distanceY <= 1;
+                        });
+                        
+                        if (isTooClose) continue;
+                        
+                        if (this.memory.maxmines > 0) {
+                            this.memory.maxmines--;
+                            placed = this.placeMine({
+                                mine,
+                                x,
+                                y
+                            });
+                        }
+        
+                        if (placed) {
+                            this.memory.placedmine.push({ x, y });
+                            this.memory.maxmines - 1;
+                            if (this.memory.maxmines <= 0){
+                                return; // Add return statement to exit the loop
+                            }
+                        }
+                    }
+                }
 
     }
 
