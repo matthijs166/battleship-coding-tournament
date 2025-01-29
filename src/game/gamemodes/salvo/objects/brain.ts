@@ -39,7 +39,7 @@ export type brainGameData = {
     myBoard: Playboard,
     myShips: Ship[] | undefined,
     enemyBoard: Playboard | undefined
-    mymines: Mine[] | undefined
+    myMines: Mine[] | undefined
 }
 export type attackTypes = "default" | "bomb" | "cross" | "radar";
 

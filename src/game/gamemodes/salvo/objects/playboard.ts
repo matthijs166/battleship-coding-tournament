@@ -68,8 +68,8 @@ export default class Playboard {
         const shipCells = this.getShipCells(ship);
 
         // Check if the cells are not occupied
-        if (shipCells.some(cell => cell.state === CellState.ship)) {
-            logger.error("Ship not placed. Ship is overlapping with another ship");
+        if (shipCells.some(cell => cell.state === CellState.ship || cell.state === CellState.mine)){
+            logger.error("Ship not placed. Ship is overlapping with another ship or mine");
             return false;
         }
 

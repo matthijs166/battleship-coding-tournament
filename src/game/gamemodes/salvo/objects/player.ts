@@ -51,7 +51,7 @@ export default class Player {
                 myBoard: this.playboard.export(),
                 myShips: this.exportShips(),
                 enemyBoard: undefined,
-                mymines: this.mines
+                myMines: this.mines
             },
             (args) => {
                 return this.placeShip(args);
@@ -109,5 +109,9 @@ export default class Player {
 
     exportShips() {
         return deepClone(this.ships);
+    }
+    
+    exportMines(){
+        return deepClone(this.mines);
     }
 }

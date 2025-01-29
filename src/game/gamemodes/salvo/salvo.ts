@@ -182,12 +182,14 @@ export default class Salvo {
         currentPlayer.updateBrain({
             myBoard: currentPlayer.playboard.export(),
             enemyBoard: enemyPlayer.playboard.exportMaskedForOpponent(),
-            myShips: currentPlayer.exportShips()
+            myShips: currentPlayer.exportShips(),
+            myMines: currentPlayer.exportMines()
         });
         enemyPlayer.updateBrain({
             myBoard: enemyPlayer.playboard.export(),
             enemyBoard: currentPlayer.playboard.exportMaskedForOpponent(),
-            myShips: enemyPlayer.exportShips()
+            myShips: enemyPlayer.exportShips(),
+            myMines: currentPlayer.exportMines()
         });
     }
 
