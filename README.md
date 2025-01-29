@@ -150,11 +150,14 @@ This mode is for debugging and testing your AI.
 
 # Will a timeout after each turn in ms, note: stepMode will be disabeld
 ./cli --run --brain basic,basicOptimized --dev --simulationSpeed 1000 
+
+# changes the gamemode of the game
+./cli --run --brain basic,basicOptimized --gamemode salvo
 ```
 
 ## Benchmark
 This mode is for when you want to simulate multiple brains against each other to mesure the performance.
-
+<br/><sub><sup>the mines do not work in the benchmark</sup></sub><br/>
 The benchmark will run X amount of games in parallel and will match each brain equally against each other to see who wins the most games.
 
 ```bash
