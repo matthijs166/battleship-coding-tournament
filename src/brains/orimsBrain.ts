@@ -15,7 +15,6 @@ export default class OrimsBrain extends Brain {
         bombLimits: 2,
         radarLimits: 1, // Add radar limit to memory
         hitShips: [] as { x: number, y: number }[], // Add hitShips to memory
-        maxmines: 5,
     };
 
     start(){

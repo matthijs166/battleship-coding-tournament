@@ -7,7 +7,6 @@ export default class BasicOptimized extends Brain {
     name = "Basic Optimized";
     memory = {
         placedmine: [] as { x: number, y: number }[],
-        maxmines: 5,
     };
     // brainGameData contains myBoard, myShips, enemyBoard
 
@@ -57,22 +56,14 @@ export default class BasicOptimized extends Brain {
                         });
                         
                         if (isTooClose) continue;
-                        
-                        if (this.memory.maxmines > 0) {
-                            this.memory.maxmines--;
                             placed = this.placeMine({
                                 mine,
                                 x,
                                 y
                             });
-                        }
         
                         if (placed) {
                             this.memory.placedmine.push({ x, y });
-                            this.memory.maxmines - 1;
-                            if (this.memory.maxmines <= 0){
-                                return; // Add return statement to exit the loop
-                            }
                         }
                     }
                 }

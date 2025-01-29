@@ -4,9 +4,7 @@ import logger from "$utils/logger";
 
 export default class BasicBrain extends Brain {
     name = "Basic Brain";
-    memory = {
-        maxmines: 5,
-    };
+    memory = {};
 
     start(){
         logger.log("BasicBrain start");
@@ -34,34 +32,24 @@ export default class BasicBrain extends Brain {
             }
         }
 
-        // if (!this.brainGameData.myMines) {
-        //     logger.error("No mines defined for player");
-        //     return;
-        // }
-        // for (let mine of this.brainGameData.myMines){
+        if (!this.brainGameData.myMines) {
+            logger.error("No mines defined for player");
+            return;
+        }
+        for (let mine of this.brainGameData.myMines){
 
-        //     let placed = false;
-        //     while (!placed) {
-        //         const x = Math.floor(Math.random() * 10);
-        //         const y = Math.floor(Math.random() * 10);
+            let placed = false;
+            while (!placed) {
+                const x = Math.floor(Math.random() * 10);
+                const y = Math.floor(Math.random() * 10);
 
-        //         if (this.memory.maxmines > 0) {
-        //             this.memory.maxmines--;
-        //             placed = this.placeMine({
-        //                 mine,
-        //                 x,
-        //                 y
-        //             });
-        //         }
-
-        //         if (placed) {
-        //             this.memory.maxmines - 1;
-        //             if (this.memory.maxmines <= 0){
-        //                 return; // Add return statement to exit the loop
-        //             }
-        //         }
-        //     }
-        // }
+                    placed = this.placeMine({
+                        mine,
+                        x,
+                        y
+                    });
+            }
+        }
 
     }
     turn(): Turn{
