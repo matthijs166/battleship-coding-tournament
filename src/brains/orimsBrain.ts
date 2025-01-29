@@ -57,13 +57,13 @@ export default class OrimsBrain extends Brain {
             }
         }
 
-        if (!this.brainGameData.mymines) {
+        if (!this.brainGameData.myMines) {
             logger.error("No mines defined for player");
             return;
         }
 
         // loop mines and try to place them randomly until all mines are placed
-        for (let mine of this.brainGameData.mymines) {
+        for (let mine of this.brainGameData.myMines) {
             let placed = false;
             while (!placed) {
                 const x = Math.floor(Math.random() * 10);
@@ -83,21 +83,21 @@ export default class OrimsBrain extends Brain {
 
                 if (isTooClose || isShipPresent) continue;
 
-                if (this.memory.maxmines > 0) {
-                    this.memory.maxmines--;
+                // if (this.memory.maxmines > 0) {
+                //     this.memory.maxmines--;
                     placed = this.placeMine({
                         mine,
                         x,
                         y
                     });
-                }
+                // }
 
                 if (placed) {
                     this.memory.placedmine.push({ x, y });
-                    this.memory.maxmines - 1;
-                    if (this.memory.maxmines <= 0){
-                        return; // Add return statement to exit the loop
-                    }
+                    // this.memory.maxmines - 1;
+                    // if (this.memory.maxmines <= 0){
+                    //     return; // Add return statement to exit the loop
+                    // }
                 }
             }
         }

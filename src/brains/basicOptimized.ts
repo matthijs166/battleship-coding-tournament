@@ -37,13 +37,13 @@ export default class BasicOptimized extends Brain {
             }
         }
 
-        if (!this.brainGameData.mymines) {
+        if (!this.brainGameData.myMines) {
                     logger.error("No mines defined for player");
                     return;
                 }
         
                 // loop mines and try to place them randomly until all mines are placed
-                for (let mine of this.brainGameData.mymines) {
+                for (let mine of this.brainGameData.myMines) {
                     let placed = false;
                     while (!placed) {
                         const x = Math.floor(Math.random() * 10);

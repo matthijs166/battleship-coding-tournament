@@ -33,7 +33,7 @@ abstract class Brain {
 
 export default Brain;
 
-export type BrainConstructor = new (brainGameData: brainGameData, placeShipCallback: placeShipCallback) => Brain;
+export type BrainConstructor = new (brainGameData: brainGameData, placeShipCallback: placeShipCallback, placeMineCallback: placeMineCallback) => Brain;
 
 export type brainGameData = {
     myBoard: Playboard,

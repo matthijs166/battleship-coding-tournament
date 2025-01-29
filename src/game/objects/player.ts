@@ -37,7 +37,7 @@ export default class Player{
                 type: shipTypes.destroyer,
                 size: 2
             })
-        ]
+        ];
         this.mines = [
             new Mine({
                 state: MineState.active
@@ -61,7 +61,7 @@ export default class Player{
                 myBoard: this.playboard.export(),
                 myShips: this.exportShips(),
                 enemyBoard: undefined,
-                mymines: this.mines
+                myMines: this.exportMines()
             },
             (args) => {
                 return this.placeShip(args);
@@ -77,6 +77,9 @@ export default class Player{
 
         if (!this.allShipsPlaced()){
             logger.warning("Not all ships are placed for player " + this.name);
+        }
+        if (!this.allMinesPlaced()){
+            logger.warning("Not all mines are placed for player " + this.name);
         }
     }
 
@@ -116,6 +119,10 @@ export default class Player{
 
     allShipsPlaced(){
         return this.ships.every(ship => ship.state === ShipState.alive);
+    }
+
+    allMinesPlaced(){
+        return this.mines.every(mine => mine.state === MineState.active);
     }
 
     exportShips(){

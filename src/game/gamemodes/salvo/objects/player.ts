@@ -55,6 +55,9 @@ export default class Player {
             },
             (args) => {
                 return this.placeShip(args);
+            },
+            (args) => {
+                return this.spawnMine(args.x, args.y);
             }
         );
     }
