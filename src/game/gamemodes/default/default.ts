@@ -48,7 +48,7 @@ export default class Game {
 
         this.bombLimits = { player1: 2, player2: 2 };
         this.crossLimits = { player1: 4, player2: 4 };
-        this.radarLimits = { player1: 1000, player2: 1000 };
+        this.radarLimits = { player1: 1, player2: 1 };
 
         this.render();
     }
