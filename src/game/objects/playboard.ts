@@ -57,10 +57,10 @@ export default class Playboard{
         }
 
         ship.setOrientation(orientation);
-        ship.setPosition(y, x);
+        ship.setPosition(x, y);
         
         // check if the ship can be placed
-        if (!this.shipInBounds(ship, y, x)){
+        if (!this.shipInBounds(ship, x, y)){
             logger.error("Ship not placed. Ship is out of bounds");
             return false;
         }
@@ -87,12 +87,12 @@ export default class Playboard{
         const { mine, x, y } = args;
 
         // check if the cell is in bounds
-        if (y >= this.ySize || x >= this.xSize) {
+        if (x >= this.xSize || y >= this.ySize) {
             logger.error("Mine not placed. Mine is out of bounds");
             return false;
         }
 
-        const cell = this.cells[y][x];
+        const cell = this.cells[x][y];
 
         // Check if the cell is not occupied
         if (cell.state === CellState.ship || cell.state === CellState.mine) {
@@ -133,19 +133,19 @@ export default class Playboard{
         let shipCells: PlayboardCell[] = [];
         if(ship.orientation === ShipOrientation.vertical){
             for(let i = 0; i < ship.size; i++){
-                shipCells.push(this.cells[ship.y][ship.x + i]);
+                shipCells.push(this.cells[ship.x][ship.y + i]);
             }
         }
         else if(ship.orientation === ShipOrientation.horizontal){
             for(let i = 0; i < ship.size; i++){
-                shipCells.push(this.cells[ship.y + i][ship.x]);
+                shipCells.push(this.cells[ship.x + i][ship.y]);
             }
         }
         return shipCells;
     }
     useBomb(x: number, y: number) {
         // check if the cell is in bounds
-        if(y >= this.ySize || x >= this.xSize){
+        if(x >= this.xSize || y >= this.ySize){
             logger.error("Cell out of bounds to target anyting");
             return false;
         }
@@ -172,7 +172,7 @@ export default class Playboard{
     }
     useCross(x: number, y: number) {
         // check if the cell is in bounds
-        if(y >= this.ySize || x >= this.xSize){
+        if(x >= this.xSize || y >= this.ySize){
             logger.error("Cell out of bounds to target anything");
             return false;
         }
@@ -196,7 +196,7 @@ export default class Playboard{
 
     useRadar(x: number, y: number) {
         // check if the cell is in bounds
-        if(y >= this.ySize || x >= this.xSize){
+        if(x >= this.xSize || y >= this.ySize){
             logger.error("Cell out of bounds to scan anything");
             return false;
         }
@@ -215,26 +215,33 @@ export default class Playboard{
 
         const radarResults = cellsToCheck.map(({ x, y }) => {
             if (x >= 0 && x < this.xSize && y >= 0 && y < this.ySize) {
-                const cell = this.cells[y][x];
+                const cell = this.cells[x][y];
                 if (cell.state === CellState.unkown) {
-                    cell.updateState(CellState.empty);
+                    if (cell.shipRef !== null) {
+                        cell.updateState(CellState.ship); // Update to ship state if it contains a ship
+                    } else if (cell.mineRef !== null) {
+                        cell.updateState(CellState.mine); // Update to mine state if it contains a mine
+                    } else {
+                        cell.updateState(CellState.empty);
+                    }
                 }
                 return { x, y, state: cell.state };
             }
             return null;
         }).filter(result => result !== null);
 
+        // Return the radar results to the player
         return radarResults;
     }
 
     receiveAttack(x: number, y: number){
         // check if the cell is in bounds
-        if(y >= this.ySize || x >= this.xSize){
+        if(x >= this.xSize || y >= this.ySize){
             logger.error("Cell out of bounds to target anything");
             return false;
         }
 
-        const cell = this.cells[y][x];
+        const cell = this.cells[x][y];
 
         if (cell.state === CellState.unkown) {
             cell.updateState(CellState.empty);

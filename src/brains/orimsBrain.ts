@@ -3,6 +3,8 @@ import PlayboardCell, { CellState } from "$game/objects/playboardCell";
 import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
 import type { attackTypes, Turn } from "$game/objects/brain";
+import fs from 'fs';
+import path from 'path';
 
 export default class OrimsBrain extends Brain {
     name = "orims Brain";
@@ -15,6 +17,8 @@ export default class OrimsBrain extends Brain {
         bombLimits: 2,
         radarLimits: 1, // Add radar limit to memory
         hitShips: [] as { x: number, y: number }[], // Add hitShips to memory
+        radarPosition: { x: 0, y: 0 }, // Add radarPosition to memory
+        lastRadarHit: undefined as { x: number, y: number, results: any } | undefined // Add lastRadarHit to memory
     };
 
     start(){
@@ -103,11 +107,27 @@ export default class OrimsBrain extends Brain {
     }
 
     getOpenCells() {
-        const openCells = this.brainGameData.enemyBoard?.getCellsByState(CellState.unkown) || [];
+        const openCells = this.brainGameData.enemyBoard?.getCellsByState(CellState.unkown) || this.brainGameData.enemyBoard?.getCellsByState(CellState.empty) || [];
         return openCells;
     }
     getState(e: { x: number, y: number }): CellState {
         return this.brainGameData.enemyBoard?.cells[e.x][e.y].state || CellState.unkown;
+    }
+    scanWithRadar() {
+        const { x, y } = this.memory.radarPosition;
+        const target = { x, y, attack: "radar" as attackTypes };
+
+        // Update radar position for the next turn
+        if (x < 9) {
+            this.memory.radarPosition.x++;
+        } else if (x === 9 && y < 9) {
+            this.memory.radarPosition.x = 0;
+            this.memory.radarPosition.y++;
+        } else {
+            this.memory.radarPosition = { x: 0, y: 0 }; // Reset to start if at the end
+        }
+
+        return target;
     }
 
     turn(): Turn {

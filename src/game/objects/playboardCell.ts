@@ -37,6 +37,8 @@ export default class PlayboardCell{
                 return CellEmojiDisplay.unkown;
             case CellState.mine:
                 return CellEmojiDisplay.mine;
+            default:
+                return CellEmojiDisplay.unkown;
         }
     }
 

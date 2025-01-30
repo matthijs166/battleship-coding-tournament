@@ -56,11 +56,13 @@ export default class BasicBrain extends Brain {
         const x = Math.floor(Math.random() * 10);
         const y = Math.floor(Math.random() * 10);
         const attackType = Math.random();
-        let attack: attackTypes = "default";
+        let attack: attackTypes = "radar";
         if (attackType < 0.1) {
-            attack = "bomb";
-        } else if (attackType < 0.2) {
-            attack = "cross";
+        //     attack = "bomb";
+        // } else if (attackType < 0.2) {
+        //     attack = "cross";
+        } else if (attackType < 0.3) {
+            attack = "radar";
         }
 
         return {
