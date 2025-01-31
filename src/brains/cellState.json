@@ -1,0 +1,53 @@
+{
+  "cellState": {
+    "x": 5,
+    "y": 5,
+    "results": [
+      {
+        "x": 5,
+        "y": 5,
+        "state": "ship"
+      },
+      {
+        "x": 4,
+        "y": 5,
+        "state": "mine"
+      },
+      {
+        "x": 6,
+        "y": 5,
+        "state": "ship"
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "state": "empty"
+      },
+      {
+        "x": 5,
+        "y": 6,
+        "state": "empty"
+      },
+      {
+        "x": 4,
+        "y": 4,
+        "state": "empty"
+      },
+      {
+        "x": 6,
+        "y": 4,
+        "state": "empty"
+      },
+      {
+        "x": 6,
+        "y": 6,
+        "state": "empty"
+      },
+      {
+        "x": 4,
+        "y": 6,
+        "state": "empty"
+      }
+    ]
+  }
+}
