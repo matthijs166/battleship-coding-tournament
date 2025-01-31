@@ -3,8 +3,6 @@ import PlayboardCell, { CellState } from "$game/objects/playboardCell";
 import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
 import type { attackTypes, Turn } from "$game/objects/brain";
-import fs from 'fs';
-import path from 'path';
 
 export default class OrimsBrain extends Brain {
     name = "orims Brain";
