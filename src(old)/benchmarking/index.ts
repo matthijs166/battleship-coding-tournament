@@ -1,10 +1,10 @@
-import type Brain from "$game/objects/brain";
+import type Brain from "$gameold/objects/brain";
 import { ChartColors } from "./chart";
 import { renderLayout, type BrainStat } from "./layout";
 import { Worker } from "worker_threads";
 import type { WorkerMessage } from "./worker";
-import logger from "$utils/logger";
-import type { GameStats } from "$game/gamemodes/default/default";
+import logger from "$utilsold/logger";
+import type { GameStats } from "$gameold/index";
 
 type BenchmarkOptions = {
     iterations: number;

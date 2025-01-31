@@ -1,13 +1,11 @@
 import type Ship from "./ship";
-import type Mine from "./mine";
 
 export default class PlayboardCell{
     x: number;
     y: number;
-    state: CellState = CellState.unkown;
-    emoji: string = CellEmojiDisplay.unkown;
+    state: CellState = CellState.empty;
+    emoji: string = CellEmojiDisplay.empty;
     shipRef: Ship | null = null;
-    mineRef: Mine | null = null;
 
     constructor(x: number, y: number){
         this.x = x;
@@ -15,11 +13,7 @@ export default class PlayboardCell{
     }
 
     updateState(newState: CellState){
-        if (this.state === CellState.unkown && newState !== CellState.mine && newState !== CellState.ship) {
-            this.state = CellState.empty;
-        } else {
-            this.state = newState;
-        }
+        this.state = newState;
         this.emoji = this.getEmoji();
     }
 
@@ -33,12 +27,6 @@ export default class PlayboardCell{
                 return CellEmojiDisplay.miss;
             case CellState.ship:
                 return this.shipRef?.emoji || CellEmojiDisplay.ship;
-            case CellState.unkown:
-                return CellEmojiDisplay.unkown;
-            case CellState.mine:
-                return CellEmojiDisplay.mine;
-            default:
-                return CellEmojiDisplay.unkown;
         }
     }
 
@@ -46,27 +34,18 @@ export default class PlayboardCell{
         this.shipRef = ship;
         this.updateState(CellState.ship);
     }
-
-    setMineRef(mine: Mine) {
-        this.mineRef = mine;
-        this.updateState(CellState.mine);
-    }
 }
 
 export enum CellState {
     empty = "empty",
     ship = "ship",
     hit = "hit",
-    miss = "miss",
-    unkown = "unkown",
-    mine = "mine"
+    miss = "miss"
 }
 
 enum CellEmojiDisplay {
     empty = "🟦",
     ship = "🚢",
     hit = "💥",
-    miss = "⬜",
-    unkown = "❔",
-    mine = "💣"
+    miss = "⬜"
 }

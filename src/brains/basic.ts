@@ -1,4 +1,4 @@
-import Brain from "$game/objects/brain";
+import Brain, { type attackTypes, type Turn } from "$game/objects/brain";
 import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
 
@@ -32,13 +32,43 @@ export default class BasicBrain extends Brain {
             }
         }
 
-    }
+        if (!this.brainGameData.myMines) {
+            logger.error("No mines defined for player");
+            return;
+        }
+        for (let mine of this.brainGameData.myMines){
 
-    turn(){
-        // Hit a random cell on the enemy playboard
+            let placed = false;
+            while (!placed) {
+                const x = Math.floor(Math.random() * 10);
+                const y = Math.floor(Math.random() * 10);
+
+                    placed = this.placeMine({
+                        mine,
+                        x,
+                        y
+                    });
+            }
+        }
+
+    }
+    turn(): Turn{
+        const x = Math.floor(Math.random() * 10);
+        const y = Math.floor(Math.random() * 10);
+        const attackType = Math.random();
+        let attack: attackTypes = "default";
+        if (attackType < 0.1) {
+            attack = "bomb";
+        } else if (attackType < 0.2) {
+            attack = "cross";
+        } else if (attackType < 0.3) {
+            attack = "radar";
+        }
+
         return {
-            x: Math.floor(Math.random() * 10),
-            y: Math.floor(Math.random() * 10)
+            x,
+            y,
+            attack
         }
     }
 }

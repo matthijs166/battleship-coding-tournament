@@ -1,11 +1,13 @@
-import Brain from "$game/objects/brain";
+import Brain, { type attackTypes, type Turn } from "$game/objects/brain";
 import PlayboardCell, { CellState } from "$game/objects/playboardCell";
 import { ShipOrientation } from "$game/objects/ship";
 import logger from "$utils/logger";
 
 export default class BasicOptimized extends Brain {
     name = "Basic Optimized";
-    memory = {};
+    memory = {
+        placedmine: [] as { x: number, y: number }[],
+    };
     // brainGameData contains myBoard, myShips, enemyBoard
 
     start(){
@@ -34,28 +36,70 @@ export default class BasicOptimized extends Brain {
             }
         }
 
+        if (!this.brainGameData.myMines) {
+                    logger.error("No mines defined for player");
+                    return;
+                }
+        
+                // loop mines and try to place them randomly until all mines are placed
+                for (let mine of this.brainGameData.myMines) {
+                    let placed = false;
+                    while (!placed) {
+                        const x = Math.floor(Math.random() * 10);
+                        const y = Math.floor(Math.random() * 10);
+                        
+                        // Check if the new mine placement is too close to existing mines
+                        const isTooClose = this.memory.placedmine.some(placedmine => {
+                            const distanceX = Math.abs(placedmine.x - x);
+                            const distanceY = Math.abs(placedmine.y - y);
+                            return distanceX <= 1 && distanceY <= 1;
+                        });
+                        
+                        if (isTooClose) continue;
+                            placed = this.placeMine({
+                                mine,
+                                x,
+                                y
+                            });
+        
+                        if (placed) {
+                            this.memory.placedmine.push({ x, y });
+                        }
+                    }
+                }
+
     }
 
     getRandomOpenCell() : PlayboardCell{
-        const openCells: PlayboardCell[] = this.brainGameData.enemyBoard?.getCellsByState(CellState.empty) || [];
+        const openCells: PlayboardCell[] = this.brainGameData.enemyBoard?.getCellsByState(CellState.unkown) || [];
 
         // return random cell in cells
         return openCells[Math.floor(Math.random() * openCells.length)];
     }
 
-    turn(){
+    turn(): Turn{
         const cell = this.getRandomOpenCell();
 
         if (!cell){
             return {
                 x: 0,
-                y: 0
+                y: 0,
+                attack: "default"
             }
+        }
+
+        const attackType = Math.random();
+        let attack: attackTypes = "default";
+        if (attackType < 0.2) {
+            attack = "bomb";
+        } else if (attackType < 0.4) {
+            attack = "cross";
         }
 
         return {
             x: cell.x,
-            y: cell.y
+            y: cell.y,
+            attack
         }
     }
 }

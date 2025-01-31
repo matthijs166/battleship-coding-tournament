@@ -1,7 +1,7 @@
 import { expect } from "bun:test";
-import Game, { type GameStats } from "../game/gamemodes/default/default";
-import Brain from "$game/objects/brain";
-import brainLoader from "$utils/brainLoader";
+import Game, { type GameStats } from "../game";
+import Brain from "$gameold/objects/brain";
+import brainLoader from "$utilsold/brainLoader";
 
 let threadId: number;
 let gameId: number;

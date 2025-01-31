@@ -1,17 +1,15 @@
-import { deepClone } from "$utils/general";
-import logger from "$utils/logger";
+import { deepClone } from "$utilsold/general";
+import logger from "$utilsold/logger";
 import type Brain from "./brain";
 import type { BrainConstructor, brainGameData } from "./brain";
 import Playboard, { type placeShipArgs } from "./playboard";
 import Ship, { shipTypes, ShipState } from "./ship";
-import Mine, { MineState } from "./mine";
 
 export default class Player{
     name: string;
     playboard: Playboard;
     ships: Ship[];
     brain: Brain;
-    mines: Mine[];
 
     constructor(name: string, brain: BrainConstructor){
         this.name = name;
@@ -37,37 +35,16 @@ export default class Player{
                 type: shipTypes.destroyer,
                 size: 2
             })
-        ];
-        this.mines = [
-            new Mine({
-                state: MineState.active
-            }),
-            new Mine({
-                state: MineState.active
-            }),
-            new Mine({
-                state: MineState.active
-            }),
-            new Mine({
-                state: MineState.active
-            }),
-            new Mine({
-                state: MineState.active
-            })
-        ];
+        ]
 
         this.brain = new brain(
             {
                 myBoard: this.playboard.export(),
                 myShips: this.exportShips(),
-                enemyBoard: undefined,
-                myMines: this.exportMines()
+                enemyBoard: undefined
             },
             (args) => {
                 return this.placeShip(args);
-            },
-            (args) => {
-                return this.spawnMine(args.x, args.y);
             }
         );
     }
@@ -77,9 +54,6 @@ export default class Player{
 
         if (!this.allShipsPlaced()){
             logger.warning("Not all ships are placed for player " + this.name);
-        }
-        if (!this.allMinesPlaced()){
-            logger.warning("Not all mines are placed for player " + this.name);
         }
     }
 
@@ -98,19 +72,8 @@ export default class Player{
             return false;
         }
         args.ship = originalShip;
-        args.x = args.y;
-        args.y = args.x;
 
         return this.playboard.placeShip(args);
-    }
-
-    spawnMine(x: number, y: number) {
-        const mine = new Mine({});
-        mine.setPosition(x, y);
-        this.mines.push(mine);
-
-        const args = { mine, x, y };
-        return this.playboard.placeMine(args);
     }
 
     allShipsSunk(){
@@ -121,16 +84,8 @@ export default class Player{
         return this.ships.every(ship => ship.state === ShipState.alive);
     }
 
-    allMinesPlaced(){
-        return this.mines.every(mine => mine.state === MineState.active);
-    }
-
     exportShips(){
         return deepClone(this.ships);
-    }
-
-    exportMines(){
-        return deepClone(this.mines);
     }
 
 }

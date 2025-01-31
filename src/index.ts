@@ -1,10 +1,11 @@
 import { parseArgs } from "util";
 import Benchmark from "./benchmarking";
-import Game from "./game";
-import brainLoader from "$utils/brainLoader";
+import { rungame } from "./game";
+import BenchmarkOld from "../src(old)/benchmarking";
+import rungameold  from "../src(old)/game";
+import { runBenchmarkOld, runGameOld } from "src(old)";
 
-
-let args = parseArgs({
+export let args = parseArgs({
     args: Bun.argv,
     tokens: true,
     options: {
@@ -42,6 +43,10 @@ let args = parseArgs({
             type: 'string',
             default: '-1',
         },
+        gamemode: {
+            type: 'string',
+            default: 'default',
+        }
     },
     strict: true,
     allowPositionals: true,
@@ -59,39 +64,39 @@ if (args.brain?.length === 1) {
     console.log("We duplicate the brain for the second player")
     args.brain.push(args.brain[0])
 }
+if (args.gamemode === "old"){
+    // Run benchmarking or game
+    if (args.benchmark) {
+        runBenchmarkOldi()
+    }
+    else if (args.run) {
+        runGameOldi()
+    }
+    async function runBenchmarkOldi() {
+        runBenchmarkOld(args)
+    }
 
-// Run benchmarking or game
-if (args.benchmark) {
-    runBenchmark()
-}
-else if (args.run) {
-    runGame()
-}
+    async function runGameOldi() {
+        runGameOld(args)
+    }
+}else{
+    // Run benchmarking or game
+    if (args.benchmark) {
+        runBenchmark()
+    }
+    else if (args.run) {
+        runGame()
+    }
+    async function runBenchmark() {
+        new Benchmark({
+            iterations: parseInt(args.iterations ?? "1000"),
+            threads: parseInt(args.threads ?? "4"),
+            brainFileNames: args.brain!,
+            chartWidth: parseInt(args.chartWidth ?? "")
+        })
+    }
 
-async function runBenchmark() {
-    new Benchmark({
-        iterations: parseInt(args.iterations ?? "1000"),
-        threads: parseInt(args.threads ?? "4"),
-        brainFileNames: args.brain!,
-        chartWidth: parseInt(args.chartWidth ?? "")
-    })
-}
-
-
-async function runGame() {
-    console.log("Running game");
-    
-    const game = new Game({
-        player1Brain: await brainLoader(args.brain![0]),
-        player2Brain: await brainLoader(args.brain![1]),
-        settings: {
-            fullGameRender: !args.disableRender,
-            stepMode: args.stepMode ?? false,
-            disableLogRender: args.disableLogRender ?? false,
-            simulationSpeed: parseInt(args.simulationSpeed ?? "-1")
-        },
-    })
-    game.start();
-    const stats = game.getStats()
-    console.log(stats);
+    async function runGame() {
+        rungame(args)
+    }
 }
