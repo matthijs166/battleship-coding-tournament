@@ -150,6 +150,8 @@ This mode is for debugging and testing your AI.
 
 # Will a timeout after each turn in ms, note: stepMode will be disabeld
 ./cli --run --brain basic,basicOptimized --dev --simulationSpeed 1000 
+
+bossBrain,mrFrondend
 ```
 
 ## Benchmark
@@ -165,15 +167,18 @@ The benchmark will run X amount of games in parallel and will match each brain e
 ./cli --benchmark --brain basic,basicOptimized --chartWidth 30
 
 # Run benchmark in dev mode, rerun after file is saved
-./cli --benchmark --brain basic,basicOptimized --dev
+./cli --benchmark --brain bossBrain,basicOptimized --dev
 
 # Set numbers of threads to run on (parallel games played)
 # Default is 4
-./cli --benchmark --brain basic,basicOptimized --threads 20
+./cli --benchmark --brain bossBrain,basicOptimized --threads 20
 
 # Set number of itterations, the number of total games played
 # Default is 1000
 ./cli --benchmark --brain basic,basicOptimized  --iterations 10
+
+
+./cli --benchmark --brain bossBrain,basicOptimized,basic,basicAkar,liselot,mrBackend,mrFrondend,peter --threads 20 --iterations 100
 ```
 
 # Suggestions & Scores
@@ -187,5 +192,10 @@ Open voor suggestions and PR's
 - Implementing  OpenSkill for benchmark matchmaking
 - Clear rules about what you can use inside a brain
 - Leader board for best brains submitted
+- X and Y are wrong (place ship, strike)
+- Prevent placing ships over each other
+- throw error if player did not place all ships
+- Throw error if the return value of turn is not right
+- Log errors when crashing in your turn
 
 Build to play on a friday [@volcano](https://volcano.nl) :)
