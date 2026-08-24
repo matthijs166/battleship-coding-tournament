@@ -52,12 +52,14 @@ export default class Game {
             this.player1.start();
         } catch (error){
             logger.error("Error starting player 1");
+            logger.error(error);
             this.playerCrashedGame = this.player1;
         }
         try {
             this.player2.start();
         } catch (error){
             logger.error("Error starting player 2");
+            logger.error(error);
             this.playerCrashedGame = this.player2;
         }
 
@@ -122,7 +124,7 @@ export default class Game {
             enemyPlayer.playboard.receiveAttack(x, y);
         } catch (error){
             logger.error("Error during player " + currentPlayer.name + " turn");
-            
+            logger.error(error);
             this.playerCrashedGame = currentPlayer;            
         }
 

@@ -64,7 +64,7 @@ export default class Benchmark {
                 clearInterval(this.renderLoop);
                 this.clearWorker();
             }
-        }, 100);
+        }, 300);
     }
 
     allThreadsIdle() {
